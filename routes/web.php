@@ -17,6 +17,15 @@ Route::get('/', function () {
 
 Auth::routes();
 
+
+Route::resource('ship-datas', 'ShipDatasController');
+Route::resource('sap-data-cfs', 'SapDataCfsController');
+Route::resource('po-datas', 'PoDatasController');
+
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/imports/shipdata', 'ImportsController@shipdata');
 Route::post('/imports/processAction', 'ImportsController@processAction');
+Route::get('/imports/sapcfsdata', 'ImportsController@sapcfsdata');
+Route::get('/imports/podata', 'ImportsController@podata');
+Route::get('/po-datas/manualProcess/{id}', 'PoDatasController@manualProcess');
+Route::get('/imports/AllProcess', 'PoDatasController@AllProcess');

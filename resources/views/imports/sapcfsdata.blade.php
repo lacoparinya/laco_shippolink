@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-12"><h2>Upload Excel | รายการพร้อมเลขใบขน</h2>
+            <div class="col-md-12"><h2>Upload Excel | SAP C&F</h2>
             </div>
 
                         @if ($errors->any())
@@ -17,7 +17,7 @@
                         <form method="POST" action="{{ url('/imports/processAction') }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
                         {{ csrf_field() }}
                             <div class="form-group col-md-6">
-                            <input type='hidden' id='import_type' name = 'import_type' value='shipdata' />
+                            <input type='hidden' id='import_type' name = 'import_type' value='sapcfsdata' />
                             <input  type="file" accept="excel/*" name="uploadfile" id="uploadfile"> 
                         </div>
                         <div class="form-group col-md-6">
