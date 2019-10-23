@@ -211,4 +211,34 @@ class PoDatasController extends Controller
         }
         return redirect('po-datas')->with('flash_message', ' Map ใบขน');
     }
+
+    public function changestatus($id)
+    {
+        $podata = PoData::findOrFail($id);
+
+        $status = '';
+        if ($podata->print_status == '') {
+            $podata->print_status = 'Uploaded';
+            $status = 'Uploaded';
+        } else {
+            $podata->print_status = '';
+        }
+        //var_dump($logpreparem);
+        $podata->update();
+
+        // return redirect('freeze-ms?status='. $status, compact('freezem'));
+        return redirect('po-datas')->with('flash_message', ' updated!');
+    }
+
+    public function changemainstatus($id,$status)
+    {
+        $podata = PoData::findOrFail($id);
+
+        $podata->main_status = $status;
+        //var_dump($logpreparem);
+        $podata->update();
+
+        // return redirect('freeze-ms?status='. $status, compact('freezem'));
+        return redirect('po-datas')->with('flash_message', ' updated!');
+    }
 }
