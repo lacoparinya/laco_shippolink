@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">PoData {{ $podata->id }}</div>
+                    <div class="card-header"><h3>รายการ# {{ $podata->id }} Order : {{ $podata->order_name }}</h3></div>
                     <div class="card-body">
 
                         <a href="{{ url('/po-datas') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
@@ -19,7 +19,6 @@
                         <br/>
                         <div class="row">
                             <div class="col-md-3"><b>CSN</b> : {{ $podata->CSN }}</div>
-                            <div class="col-md-3"><b>Order</b> : {{ $podata->order_name }}</div>
                             <div class="col-md-3"><b>Loading Date</b> : {{ $podata->loading_date}}</div>
                             <div class="col-md-3"><b>Follow Up Date</b> : {{ date('Y-m-d', strtotime('+14 day', strtotime($podata->loading_date))) }}</div>
                             <div class="col-md-3"><b>Sale Order</b> : {{ $podata->sale_order_name}}</div>
@@ -28,7 +27,7 @@
                             <div class="col-md-3"><b>ใบขน</b> : {{ $podata->trans_name}}</div>
                             <div class="col-md-3"><b>Ref Shippment.</b> : {{ $podata->ref_ship_name}}</div>
                             <div class="col-md-3"><b>C & F</b> : {{ round($podata->candf,2) }}</div>
-                            <div class="col-md-3"><b>Status</b> : {{ $podata->status}}</div>
+                            <div class="col-md-3"><b>Link</b> : {{ $podata->status}}</div>
                             <div class="col-md-3"><b>Upload ใบขน</b> : 
                             @if ($podata->fileupload->count() > 0)
                                 {{ 'Uploaded' }}
@@ -72,8 +71,12 @@
                                     @endphp
                                     @foreach ($podata->podatadetails as $item)
                                     @php
-                                        $totaltax += ($item->shipdata->BHT * $item->tax_rate)/100;
-                                        $totalbaht += $item->shipdata->BHT;
+                                        if(isset($item->shipdata->BHT) && !empty($item->tax_rate)){
+                                           
+                                            $totaltax += ($item->shipdata->BHT * $item->tax_rate)/100;
+                                            $totalbaht += $item->shipdata->BHT;
+                                            
+                                        }
                                     @endphp
                                     <tr>
                                         <td>{{$item->product_name}}</td>
@@ -81,8 +84,22 @@
                                         <td>{{number_format($item->weight,2,".",",")}}</td>
                                         <td>{{number_format($item->qty,0,".",",")}}</td>
                                         <td>{{$item->unit_name}}</td>
-                                        <td>{{number_format($item->shipdata->BHT,2,".",",")}}</td>
-                                        <td>{{ number_format(($item->shipdata->BHT * $item->tax_rate)/100,2,".",",")  }}</td>
+                                        <td>
+                                        @if (isset($item->shipdata->BHT))
+                                            {{ number_format($item->shipdata->BHT,2,".",",") }}
+                                        @else
+                                            0
+                                        @endif
+                                        </td>
+                                        <td>
+                                        @if (isset($item->shipdata->BHT) && !empty($item->tax_rate))
+                                            {{ number_format(($item->shipdata->BHT * $item->tax_rate)/100,2,".",",")  }}
+                                        @else
+                                            0
+                                        @endif
+                                            
+
+                                        </td>
                                     </tr>    
                                     @endforeach
                                     <tr>
