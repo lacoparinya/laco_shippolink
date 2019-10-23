@@ -21,6 +21,7 @@
                             <div class="col-md-3"><b>CSN</b> : {{ $podata->CSN }}</div>
                             <div class="col-md-3"><b>Order</b> : {{ $podata->order_name }}</div>
                             <div class="col-md-3"><b>Loading Date</b> : {{ $podata->loading_date}}</div>
+                            <div class="col-md-3"><b>Follow Up Date</b> : {{ date('Y-m-d', strtotime('+14 day', strtotime($podata->loading_date))) }}</div>
                             <div class="col-md-3"><b>Sale Order</b> : {{ $podata->sale_order_name}}</div>
                             <div class="col-md-3"><b>Invoice</b> : {{ $podata->inv_name}}</div>
                             <div class="col-md-3"><b>Billing</b> : {{ $podata->billing_name}}</div>
@@ -28,6 +29,27 @@
                             <div class="col-md-3"><b>Ref Shippment.</b> : {{ $podata->ref_ship_name}}</div>
                             <div class="col-md-3"><b>C & F</b> : {{ round($podata->candf,2) }}</div>
                             <div class="col-md-3"><b>Status</b> : {{ $podata->status}}</div>
+                            <div class="col-md-3"><b>Upload ใบขน</b> : 
+                            @if ($podata->fileupload->count() > 0)
+                                {{ 'Uploaded' }}
+                            @else
+                                {{ "-"}}
+                            @endif
+                            </div>
+                            <div class="col-md-3"><b>Print เอกสาร</b> : {{ $podata->print_status}}</div>
+                            <div class="col-md-3"><b>สถานะ</b> : 
+                                @if ($podata->main_status != 'Complete')
+                                    @if (strtotime('+14 day', strtotime($podata->loading_date)) <= strtotime(date('Y-m-d')))
+                                        <span style="background-color:red;">เกินวันที่กำหนด</span>
+                                    @else
+                                        Process
+                                    @endif
+                                @else
+                                    {{ $podata->main_status}}    
+                                @endif
+                                
+                            
+                            </div>
                         </div>
 
                         <div class="table-responsive">

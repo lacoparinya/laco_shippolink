@@ -24,9 +24,9 @@ class PoDatasController extends Controller
         $perPage = 25;
 
         if (!empty($keyword)) {
-            $podatas = PoData::latest()->paginate($perPage);
+            $podatas = PoData::orderBy('loading_date')->paginate($perPage);
         } else {
-            $podatas = PoData::latest()->paginate($perPage);
+            $podatas = PoData::orderBy('loading_date')->paginate($perPage);
         }
 
         return view('po-datas.index', compact('podatas'));

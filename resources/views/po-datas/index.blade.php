@@ -39,7 +39,7 @@
                                         <th>#</th>
                                         <th>CSN</th>
                                         <th>Order Name</th>
-                                        <th>Loading Date</th>
+                                        <th>Loading Date<br/>Follow up date</th>
                                         <th>Sale Order</th>
                                         <th>No. Items</th>
                                         <th>Tax Return</th>
@@ -55,7 +55,14 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $item->CSN }}</td>
                                         <td>{{ $item->order_name }}</td>
-                                        <td>{{ $item->loading_date }}</td>
+                                        @if ( strtotime('+14 day', strtotime($item->loading_date)) <= strtotime(date('Y-m-d')))
+                                          <td style="background-color:red;">{{ $item->loading_date }}<br/>{{ date('Y-m-d', strtotime('+14 day', strtotime($item->loading_date))) }}</td>
+                                          
+                                        @else
+                                          <td>{{ $item->loading_date }}<br/>{{ date('Y-m-d', strtotime('+14 day', strtotime($item->loading_date))) }}</td>
+                                          
+                                        @endif
+                                        
                                         <td>{{ $item->sale_order_name }}</td>
                                         <td>{{ $item->podatadetails->count() }}</td>
                                         <td>
@@ -75,20 +82,35 @@
                                         <td><a href="{{ url('/po-datas/manualProcess/' . $item->id) }}" title="View PoData"><button class="btn btn-info btn-sm" style="font-size:9px;">{{ $item->status }}</button></a>
                                            </td>
                                            <td>
+                                               @php
+                                                   $flagcanclosed = true;
+                                               @endphp
                                                @if ($item->fileupload->count() > 0)
                                                   <a href="{{ url($item->fileupload[0]->serverpath) }}" title="View PoData"><button class="btn btn-primary btn-sm"><i class="fa fa-upload" aria-hidden="true"></i></button></a>
                                                 
                                                @else
                                                    <a href="#" title="View PoData"><button class="btn btn-info btn-sm"><i class="fa fa-upload" aria-hidden="true"></i></button></a>
-                                               
+                                                    @php
+                                                   $flagcanclosed = false;
+                                               @endphp
                                                @endif
                                                @if ($item->print_status == '')
+                                               @php
+                                                   $flagcanclosed = false;
+                                               @endphp
                                                <a href="{{ url('/po-datas/changestatus/' . $item->id) }}" title="View PoData"><button class="btn btn-info btn-sm"><i class="fa fa-print" aria-hidden="true"></i></button></a>
                                                @else
                                                <a href="{{ url('/po-datas/changestatus/' . $item->id) }}" title="View PoData"><button class="btn btn-primary btn-sm"><i class="fa fa-print" aria-hidden="true"></i></button></a>
                                                @endif
                                         </td>
-                                        <td>{{ $item->main_status }}</td>
+                                        <td>
+                                            @if ($flagcanclosed && $item->main_status != 'Complete')
+                                                <a href="{{ url('/po-datas/changemainstatus/' . $item->id .'/Complete') }}" title="View PoData"><button class="btn btn-primary btn-sm"><i class="fa fa-check-circle" aria-hidden="true"></i></button></a>
+                                            @else
+                                               {{ $item->main_status }} 
+                                            @endif
+                                            
+                                        </td>
                                         <td>
                                             
                                             <a href="{{ url('/po-datas/' . $item->id) }}" title="View PoData"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>

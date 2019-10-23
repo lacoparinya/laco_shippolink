@@ -30,3 +30,4 @@ Route::get('/po-datas/manualProcess/{id}', 'PoDatasController@manualProcess');
 Route::get('/imports/AllProcess', 'PoDatasController@AllProcess');
 Route::get('/imports/AllProcessCf', 'PoDatasController@AllProcessCf');
 Route::get('/po-datas/changestatus/{id}', 'PoDatasController@changestatus');
+Route::get('/po-datas/changemainstatus/{id}/{status}', 'PoDatasController@changemainstatus');
