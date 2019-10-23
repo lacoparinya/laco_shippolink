@@ -24,6 +24,9 @@
                                 <input name='btnsave' id='btnsave' class="btn btn-primary" type="submit" value="Upload" >
                             </div>
                         </form>
+                        <a href="{{ url('/template/template_sap.xls') }}" class="btn btn-success btn-sm" title="Add New PoData">
+                            <i class="fa fa-plus" aria-hidden="true"></i> Template Excel
+                        </a>
             </div>
         </div>
     </div>

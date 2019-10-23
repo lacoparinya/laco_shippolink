@@ -26,7 +26,7 @@
                             <div class="col-md-3"><b>Billing</b> : {{ $podata->billing_name}}</div>
                             <div class="col-md-3"><b>ใบขน</b> : {{ $podata->trans_name}}</div>
                             <div class="col-md-3"><b>Ref Shippment.</b> : {{ $podata->ref_ship_name}}</div>
-                            <div class="col-md-3"><b>C & F</b> : {{ $podata->candf}}</div>
+                            <div class="col-md-3"><b>C & F</b> : {{ round($podata->candf,2) }}</div>
                             <div class="col-md-3"><b>Status</b> : {{ $podata->status}}</div>
                         </div>
 
@@ -39,18 +39,36 @@
                                         <th>Weight</th>
                                         <th>Qty</th>
                                         <th>Unit</th>
+                                        <th>BHT</th>
+                                        <th>Tax Return</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @php
+                                        $totaltax = 0;
+                                        $totalbaht = 0;
+                                    @endphp
                                     @foreach ($podata->podatadetails as $item)
+                                    @php
+                                        $totaltax += ($item->shipdata->BHT * $item->tax_rate)/100;
+                                        $totalbaht += $item->shipdata->BHT;
+                                    @endphp
                                     <tr>
                                         <td>{{$item->product_name}}</td>
                                         <td>{{$item->product_code}}</td>
-                                        <td>{{$item->weight}}</td>
-                                        <td>{{$item->qty}}</td>
+                                        <td>{{number_format($item->weight,2,".",",")}}</td>
+                                        <td>{{number_format($item->qty,0,".",",")}}</td>
                                         <td>{{$item->unit_name}}</td>
+                                        <td>{{number_format($item->shipdata->BHT,2,".",",")}}</td>
+                                        <td>{{ number_format(($item->shipdata->BHT * $item->tax_rate)/100,2,".",",")  }}</td>
                                     </tr>    
                                     @endforeach
+                                    <tr>
+                                        <td colspan="5">Total</td>
+                                        <td>{{ number_format($totalbaht,2,".",",") }}</td>
+                                        <td>{{ number_format($totaltax,2,".",",") }}</td>
+                                    </tr>
+
                                 </tbody>
                             </table>
                         </div>

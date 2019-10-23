@@ -10,8 +10,14 @@
                         <a href="{{ url('/po-datas/create') }}" class="btn btn-success btn-sm" title="Add New PoData">
                             <i class="fa fa-plus" aria-hidden="true"></i> Add New
                         </a>
+                        <a href="{{ url('/imports/podata') }}" class="btn btn-success btn-sm" title="Add New ShipData">
+                            <i class="fa fa-plus" aria-hidden="true"></i> Import
+                        </a>
                         <a href="{{ url('/imports/AllProcess') }}" class="btn btn-success btn-sm" title="Add New PoData">
-                            <i class="fa fa-plus" aria-hidden="true"></i> All Process
+                            <i class="fa fa-plus" aria-hidden="true"></i> All ใบขน
+                        </a>
+                        <a href="{{ url('/imports/AllProcessCf') }}" class="btn btn-success btn-sm" title="Add New PoData">
+                            <i class="fa fa-plus" aria-hidden="true"></i> All C & F
                         </a>
                         <form method="GET" action="{{ url('/po-datas') }}" accept-charset="UTF-8" class="form-inline my-2 my-lg-0 float-right" role="search">
                             <div class="input-group">

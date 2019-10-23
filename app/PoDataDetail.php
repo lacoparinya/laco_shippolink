@@ -14,6 +14,13 @@ class PoDataDetail extends Model
       ,'qty'
       ,'unit_name'
       ,'unit_id'
+      ,'ship_data_id'
+      ,'tax_rate'
       ,'use'
       ,'status'];
+
+    public function shipdata()
+    {
+      return $this->hasOne('App\ShipData', 'id', 'ship_data_id');
+    }
 }

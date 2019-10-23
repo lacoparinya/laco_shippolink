@@ -159,7 +159,7 @@ class ImportsController extends Controller
                             if(!empty($chkmaster)){
 
                             }else{
-                                var_dump($row);
+                                //var_dump($row);
                                 $tmp = array();
 
                                 $tmp['upload_date'] = date('Y-m-d');
@@ -193,6 +193,7 @@ class ImportsController extends Controller
                                 $tmp2['weight'] = $row->weight;
                                 $tmp2['qty'] = $row->quantity;
                                 $tmp2['unit_name'] = $row->unit;
+                                $tmp2['tax_rate'] = $row->tax;
                                 $tmp2['use'] = 'Yes';
                                 $tmp2['status'] = 'WAIT';
 

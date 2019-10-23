@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 
 use App\PoData;
 use App\ShipData;
+use App\SapDataCf;
+use App\PoDataDetail;
 use Illuminate\Http\Request;
 
 class PoDatasController extends Controller
@@ -143,7 +145,7 @@ class PoDatasController extends Controller
 
     public function AllProcess()
     {
-        $podatas = PoData::where('status','WAIT')->get();
+        $podatas = PoData::whereIn('status',['WAIT', 'MAP C & F'])->get();
 
         foreach ($podatas as $podata) {
 
@@ -155,15 +157,57 @@ class PoDatasController extends Controller
 
                 if (!empty($shipData)) {
                     $transname = $shipData->trans_no;
+
+                    $tmpdata = PoDataDetail::findOrFail($podatadetail->id);
+                    $tmpdata->ship_data_id = $shipData->id;
+                    $tmpdata->status = 'MAP Trans';
+                    $tmpdata->update();
+                    
+
                 }
             }
 
             if (!empty($transname)) {
                 $podata->trans_name = $transname;
-                $podata->status = 'MAP Trans';
+                if ($podata->status == 'MAP C & F') {
+                    $podata->status = 'MAP Trans / C & F';
+                } elseif ($podata->status == 'WAIT') {
+                    $podata->status = 'MAP Trans';
+                }
+
                 $podata->update();
             }
 
+        }
+        return redirect('po-datas')->with('flash_message', ' Map ใบขน');
+    }
+
+    public function AllProcessCf()
+    {
+        $podatas = PoData::whereIn('status', ['WAIT', 'MAP Trans'])->get();
+
+        echo $podatas->count();
+
+        foreach ($podatas as $podata) {
+
+            //Map transistion paper
+            $candf = 0;
+            $sapdatacf = SapDataCf::where('billing_doc', $podata->billing_name)->first();
+
+            if (!empty($sapdatacf)) {
+                $candf = $sapdatacf->net_value;
+            }
+
+            if (!empty($candf)) {
+                $podata->candf = $candf;
+                if($podata->status == 'MAP Trans'){
+                    $podata->status = 'MAP Trans / C & F';
+                }elseif($podata->status == 'WAIT'){
+                    $podata->status = 'MAP C & F';
+                }
+                
+                $podata->update();
+            }
         }
         return redirect('po-datas')->with('flash_message', ' Map ใบขน');
     }
