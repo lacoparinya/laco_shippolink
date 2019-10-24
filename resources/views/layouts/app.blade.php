@@ -30,7 +30,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ 'Ship.PO.Link' }}
+                        {{ 'Ship|PO|Link' }}
                     </a>
                 </div>
 
