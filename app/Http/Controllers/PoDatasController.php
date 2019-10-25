@@ -10,6 +10,8 @@ use App\ShipData;
 use App\SapDataCf;
 use App\PoDataDetail;
 use Illuminate\Http\Request;
+use Illuminate\Routing\UrlGenerator;
+
 
 class PoDatasController extends Controller
 {
@@ -22,14 +24,25 @@ class PoDatasController extends Controller
     {
         $keyword = $request->get('search');
         $perPage = 25;
+        $status = $request->get('status');;
 
-        if (!empty($keyword)) {
-            $podatas = PoData::orderBy('loading_date')->paginate($perPage);
-        } else {
-            $podatas = PoData::orderBy('loading_date')->paginate($perPage);
+        if (empty($status)) {
+            if (!empty($keyword)) {
+                $podatas = PoData::orderBy('loading_date')->paginate($perPage);
+            } else {
+                $podatas = PoData::orderBy('loading_date')->paginate($perPage);
+            }
+        }else{
+            if (!empty($keyword)) {
+                $podatas = PoData::where('main_status', $status)->orderBy('loading_date')->paginate($perPage);
+            } else {
+                $podatas = PoData::where('main_status', $status)->orderBy('loading_date')->paginate($perPage);
+            }
         }
 
-        return view('po-datas.index', compact('podatas'));
+        
+
+        return view('po-datas.index', compact('podatas','status'));
     }
 
     /**
@@ -160,7 +173,7 @@ class PoDatasController extends Controller
 
                     $tmpdata = PoDataDetail::findOrFail($podatadetail->id);
                     $tmpdata->ship_data_id = $shipData->id;
-                    $tmpdata->status = 'MAP Trans';
+                    $tmpdata->status = 'MAP ใบขน';
                     $tmpdata->update();
                     
 
@@ -170,10 +183,11 @@ class PoDatasController extends Controller
             if (!empty($transname)) {
                 $podata->trans_name = $transname;
                 if ($podata->status == 'MAP C & F') {
-                    $podata->status = 'MAP Trans / C & F';
+                    $podata->status = 'MAP ใบขน / C & F';
                 } elseif ($podata->status == 'WAIT') {
-                    $podata->status = 'MAP Trans';
+                    $podata->status = 'MAP ใบขน';
                 }
+                $podata->status_trans = 'Yes';
 
                 $podata->update();
             }
@@ -184,7 +198,7 @@ class PoDatasController extends Controller
 
     public function AllProcessCf()
     {
-        $podatas = PoData::whereIn('status', ['WAIT', 'MAP Trans'])->get();
+        $podatas = PoData::whereIn('status', ['WAIT', 'MAP ใบขน'])->get();
 
         echo $podatas->count();
 
@@ -200,11 +214,12 @@ class PoDatasController extends Controller
 
             if (!empty($candf)) {
                 $podata->candf = $candf;
-                if($podata->status == 'MAP Trans'){
-                    $podata->status = 'MAP Trans / C & F';
+                if($podata->status == 'MAP ใบขน'){
+                    $podata->status = 'MAP ใบขน / C & F';
                 }elseif($podata->status == 'WAIT'){
                     $podata->status = 'MAP C & F';
                 }
+                $podata->status_cnf = 'Yes';
                 
                 $podata->update();
             }
@@ -225,9 +240,8 @@ class PoDatasController extends Controller
         }
         //var_dump($logpreparem);
         $podata->update();
-
-        // return redirect('freeze-ms?status='. $status, compact('freezem'));
-        return redirect('po-datas')->with('flash_message', ' updated!');
+        
+        return redirect(url()->previous())->with('flash_message', ' updated!');
     }
 
     public function changemainstatus($id,$status)
@@ -239,6 +253,6 @@ class PoDatasController extends Controller
         $podata->update();
 
         // return redirect('freeze-ms?status='. $status, compact('freezem'));
-        return redirect('po-datas')->with('flash_message', ' updated!');
+        return redirect(url()->previous())->with('flash_message', ' updated!');
     }
 }

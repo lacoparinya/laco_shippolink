@@ -14,10 +14,10 @@
                             <i class="fa fa-upload" aria-hidden="true"></i> Upload ใบขน
                         </a>
                         <a href="{{ url('/imports/AllProcess') }}" class="btn btn-success btn-sm" title="Add New PoData">
-                            <i class="fa fa-microchip" aria-hidden="true"></i> All ใบขน
+                            <i class="fa fa-microchip" aria-hidden="true"></i> Map ใบขน
                         </a>
                         <a href="{{ url('/imports/AllProcessCf') }}" class="btn btn-success btn-sm" title="Add New PoData">
-                            <i class="fa fa-microchip" aria-hidden="true"></i> All C & F
+                            <i class="fa fa-microchip" aria-hidden="true"></i> Map C & F
                         </a>
                         <form method="GET" action="{{ url('/po-datas') }}" accept-charset="UTF-8" class="form-inline my-2 my-lg-0 float-right" role="search">
                             <div class="input-group">
@@ -30,21 +30,29 @@
                             </div>
                         </form>
 
-                        <br/>
+                        <a href="{{ url('/po-datas') }}" class="btn btn-primary btn-sm" title="ALL">
+                            <i class="fa fa-globe" aria-hidden="true"></i> ALL
+                        </a>
+                        <a href="{{ url('/po-datas?status=Process') }}" class="btn btn-primary btn-sm" title="Status Process">
+                            <i class="fa fa-play" aria-hidden="true"></i> Process
+                        </a>
+                        <a href="{{ url('/po-datas?status=Complete') }}" class="btn btn-primary btn-sm" title="Status Complete">
+                            <i class="fa fa-check-square" aria-hidden="true"></i> Complete
+                        </a>
+                        <a href="{{ url('/po-datas?status=reject') }}" class="btn btn-primary btn-sm" title="Status Reject">
+                            <i class="fa fa-chain-broken" aria-hidden="true"></i> Reject
+                        </a>
                         <br/>
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>CSN</th>
-                                        <th>Order Name</th>
+                                        <th>CSN / Order Name / Sale Order</th>
                                         <th>Loading Date<br/>Follow up date</th>
-                                        <th>Sale Order</th>
-                                        <th>No. Items</th>
+                                        <th>จำนวนสินค้า</th>
                                         <th>Tax Return</th>
                                         <th>Link</th>
-                                        <th>OverAll</th>
                                         <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
@@ -53,8 +61,7 @@
                                 @foreach($podatas as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->CSN }}</td>
-                                        <td>{{ $item->order_name }}</td>
+                                        <td><a href="{{ url('/po-datas/' . $item->id) }}" title="View PoData">{{ $item->CSN }} / {{ $item->order_name }} / {{ $item->sale_order_name }}</a></td>
                                         @if ( strtotime('+14 day', strtotime($item->loading_date)) <= strtotime(date('Y-m-d')))
                                           <td style="background-color:red;">{{ $item->loading_date }}<br/>{{ date('Y-m-d', strtotime('+14 day', strtotime($item->loading_date))) }}</td>
                                           
@@ -62,12 +69,10 @@
                                           <td>{{ $item->loading_date }}<br/>{{ date('Y-m-d', strtotime('+14 day', strtotime($item->loading_date))) }}</td>
                                           
                                         @endif
-                                        
-                                        <td>{{ $item->sale_order_name }}</td>
-                                        <td>{{ $item->podatadetails->count() }}</td>
+                                        <td style="text-align:center;">{{ $item->podatadetails->count() }}</td>
                                         <td>
                                             @php
-                                                if($item->status == 'MAP Trans / C & F'){
+                                              //  if($item->status == 'MAP Trans / C & F'){
                                                     $totaltax = 0;
                                                     foreach ($item->podatadetails as $itemdetail) {
                                                         if(!empty($itemdetail->ship_data_id)){
@@ -75,21 +80,28 @@
                                                         }
                                                     }
                                                     echo number_format($totaltax,2,".",",");
-                                                }
+                                             //   }
                                             @endphp
                                         </td>
                                         
-                                        <td><a href="{{ url('/po-datas/manualProcess/' . $item->id) }}" title="View PoData"><button class="btn btn-info btn-sm" style="font-size:9px;">{{ $item->status }}</button></a>
-                                           </td>
-                                           <td>
+                                        <td>
+                                            @if ($item->status_trans == 'Yes')
+                                                <button class="btn btn-success btn-sm" title="Map ใบขนแล้ว" ><i class="fa fa-truck" aria-hidden="true"></i></button>
+                                            @else
+                                                <button class="btn btn-light btn-sm" title="ยังไม่ได้ Map ใบขน"><i class="fa fa-truck" aria-hidden="true"></i></button>
+                                            @endif
+                                            @if ($item->status_cnf == 'Yes')
+                                                <button class="btn btn-success btn-sm" title="Map C & F แล้ว" ><i class="fa fa-usd" aria-hidden="true"></i></button>
+                                            @else
+                                                <button class="btn btn-light btn-sm" title="ยังไม่ได้ Map C & F" ><i class="fa fa-usd" aria-hidden="true"></i></button>
+                                            @endif
                                                @php
                                                    $flagcanclosed = true;
                                                @endphp
                                                @if ($item->fileupload->count() > 0)
-                                                  <a href="{{ url($item->fileupload[0]->serverpath) }}" title="View PoData"><button class="btn btn-primary btn-sm"><i class="fa fa-upload" aria-hidden="true"></i></button></a>
-                                                
+                                                  <a href="{{ url($item->fileupload[0]->serverpath) }}" title="Upload ใบขนแล้ว"><button class="btn btn-success btn-sm"><i class="fa fa-upload" aria-hidden="true"></i></button></a>
                                                @else
-                                                   <a href="#" title="View PoData"><button class="btn btn-info btn-sm"><i class="fa fa-upload" aria-hidden="true"></i></button></a>
+                                                   <a href="{{ url('/file-uploads/create') }}" title="ยังไม่ได้ Upload ใบขน"><button class="btn btn-light btn-sm" ><i class="fa fa-upload" aria-hidden="true"></i></button></a>
                                                     @php
                                                    $flagcanclosed = false;
                                                @endphp
@@ -98,9 +110,9 @@
                                                @php
                                                    $flagcanclosed = false;
                                                @endphp
-                                               <a href="{{ url('/po-datas/changestatus/' . $item->id) }}" title="View PoData"><button class="btn btn-info btn-sm"><i class="fa fa-print" aria-hidden="true"></i></button></a>
+                                               <a href="{{ url('/po-datas/changestatus/' . $item->id) }}" title="ยังไม่ได้ Print เอกสาร"><button class="btn btn-light btn-sm"><i class="fa fa-print" aria-hidden="true"></i></button></a>
                                                @else
-                                               <a href="{{ url('/po-datas/changestatus/' . $item->id) }}" title="View PoData"><button class="btn btn-primary btn-sm"><i class="fa fa-print" aria-hidden="true"></i></button></a>
+                                               <a href="{{ url('/po-datas/changestatus/' . $item->id) }}" title="Print เอกสารแล้ว"><button class="btn btn-success btn-sm"><i class="fa fa-print" aria-hidden="true"></i></button></a>
                                                @endif
                                         </td>
                                         <td>
@@ -113,7 +125,6 @@
                                         </td>
                                         <td>
                                             
-                                            <a href="{{ url('/po-datas/' . $item->id) }}" title="View PoData"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
                                             <a href="{{ url('/po-datas/' . $item->id . '/edit') }}" title="Edit PoData"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
 
                                             <form method="POST" action="{{ url('/po-datas' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
@@ -121,12 +132,15 @@
                                                 {{ csrf_field() }}
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete PoData" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                                             </form>
+
+                                             <a href="{{ url('/po-datas/changemainstatus/' . $item->id .'/reject') }}" title="View PoData"><button class="btn btn-primary btn-sm"><i class="fa fa-chain-broken" aria-hidden="true"></i></button></a>
                                         </td>
                                     </tr>
                                 @endforeach
                                 </tbody>
                             </table>
-                            <div class="pagination-wrapper"> {!! $podatas->appends(['search' => Request::get('search')])->render() !!} </div>
+                             <div class="pagination-wrapper"> {!! $podatas->appends(['search' => Request::get('search'),'status' => Request::get('status')])->render() !!} </div>
+                       
                         </div>
 
                     </div>
