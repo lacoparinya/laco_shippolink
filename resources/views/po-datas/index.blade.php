@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header"><h3>PO Datas</h3></div>
+                <div class="card-header"><h3>PO Datas | Status : {{ $status or 'ALL' }}</h3></div>
                     <div class="card-body">
                         <a href="{{ url('/imports/podata') }}" class="btn btn-success btn-sm" title="Add New ShipData">
                             <i class="fa fa-upload" aria-hidden="true"></i> Import
@@ -63,10 +63,10 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td><a href="{{ url('/po-datas/' . $item->id) }}" title="View PoData">{{ $item->CSN }} / {{ $item->order_name }} / {{ $item->sale_order_name }}</a></td>
                                         @if ( strtotime('+14 day', strtotime($item->loading_date)) <= strtotime(date('Y-m-d')))
-                                          <td style="background-color:red;">{{ $item->loading_date }}<br/>{{ date('Y-m-d', strtotime('+14 day', strtotime($item->loading_date))) }}</td>
+                                          <td style="background-color:red;color:white;text-align:center;">{{ $item->loading_date }}<br/>{{ date('Y-m-d', strtotime('+14 day', strtotime($item->loading_date))) }}</td>
                                           
                                         @else
-                                          <td>{{ $item->loading_date }}<br/>{{ date('Y-m-d', strtotime('+14 day', strtotime($item->loading_date))) }}</td>
+                                          <td style="text-align:center;">{{ $item->loading_date }}<br/>{{ date('Y-m-d', strtotime('+14 day', strtotime($item->loading_date))) }}</td>
                                           
                                         @endif
                                         <td style="text-align:center;">{{ $item->podatadetails->count() }}</td>
@@ -132,8 +132,13 @@
                                                 {{ csrf_field() }}
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete PoData" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                                             </form>
+                                            @if ($item->main_status == 'reject')
+                                                <a href="{{ url('/po-datas/changemainstatus/' . $item->id .'/Process') }}" title="View PoData"><button class="btn btn-primary btn-sm"><i class="fa fa-link" aria-hidden="true"></i></button></a>
+                                            @else
+                                                <a href="{{ url('/po-datas/changemainstatus/' . $item->id .'/reject') }}" title="View PoData"><button class="btn btn-primary btn-sm"><i class="fa fa-chain-broken" aria-hidden="true"></i></button></a>
+                                            @endif
 
-                                             <a href="{{ url('/po-datas/changemainstatus/' . $item->id .'/reject') }}" title="View PoData"><button class="btn btn-primary btn-sm"><i class="fa fa-chain-broken" aria-hidden="true"></i></button></a>
+                                             
                                         </td>
                                     </tr>
                                 @endforeach

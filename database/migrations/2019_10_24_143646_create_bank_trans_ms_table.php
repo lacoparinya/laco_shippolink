@@ -15,6 +15,13 @@ class CreateBankTransMsTable extends Migration
     {
         Schema::create('bank_trans_ms', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('filename');
+            $table->string('serverpath');
+            $table->string('type')->nullable;
+            $table->float('total_usd');
+            $table->float('total_bht');
+            $table->float('exchange_rate');
+            $table->text('note')->nullable;
             $table->timestamps();
         });
     }
