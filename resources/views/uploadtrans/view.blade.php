@@ -40,6 +40,7 @@
                                         <th>ยอดรวม C&F USD</th>
                                         <th>ยอดจ่ายมา USD (%)</th>
                                         <th>ยอดค้าง USD (%)</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -54,10 +55,16 @@
                                     @endphp
                                         <tr>
                                         <td>{{  $item2->podata->inv_name or $item2->other_case }}</td>
-                                        <td>{{  $item2->podata->candf or 0}}</td>
+                                        <td>
+                                            @if (isset($item2->podata->candf))
+                                                {{  round($item2->podata->candf,2) }}
+                                            @else
+                                                -
+                                            @endif
+                                            </td>
                                         <td>
                                             @if (isset($item2->podata->candf)) 
-                                                {{  $item2->income_usd }} ({{  round($item2->income_usd*100/$item2->podata->candf,2) }} )
+                                                {{  round($item2->income_usd,2) }} ({{  round($item2->income_usd*100/$item2->podata->candf,2) }} )
                                             @else
                                                                                                 {{  $item2->income_usd }} 
                                             @endif
@@ -67,10 +74,13 @@
                                         </td>
                                         <td>
                                              @if (isset($item2->podata->candf)) 
-                                             {{  $item2->podata->candf - $item2->income_usd }} ({{  round(($item2->podata->candf - $item2->income_usd)*100/$item2->podata->candf,2) }} )
+                                             {{  round($item2->podata->candf - $item2->income_usd,2) }} ({{  round(($item2->podata->candf - $item2->income_usd)*100/$item2->podata->candf,2) }} )
                                              @else
                                               0
                                             @endif
+                                             </td>
+                                             <td>
+                                                  <a href="{{ url('/uploadtrans/removeinv/' . $item2->id) }}" title="Edit SapDataCf"><button class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button></a>
                                              </td>
                                     </tr> 
                                     @endforeach

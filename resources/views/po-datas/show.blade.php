@@ -111,7 +111,38 @@
                                 </tbody>
                             </table>
                         </div>
-
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>โอนวันที่</th>
+                                        <th>ยอดโอน</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $totalincomeusd = 0;
+                                    @endphp
+                                    @foreach ($podata->banktransd as $item)
+                                    @php
+                                       $totalincomeusd += $item->income_usd;
+                                    @endphp
+                                    <tr>
+                                    <td>{{ $item->id }}</td>
+                                    <td>{{ $item->income_usd }}</td>
+                                    </tr>    
+                                    @endforeach
+                                    <tr>
+                                        <td>Total</td>
+                                        <td>{{ $totalincomeusd }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ค้าง</td>
+                                        <td>{{ round($podata->candf,2) - $totalincomeusd }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -9,7 +9,8 @@ class PoData extends Model
     protected $fillable = [
         'upload_date', 'CSN', 'csn_id', 'order_name', 'order_id', 'loading_date', 'sale_order_name', 
         'sale_order_id', 'inv_name', 'inv_id', 'billing_name', 'billing_id', 'trans_name', 'trans_id', 
-        'ref_ship_name', 'ref_ship_id', 'candf', 'note', 'status','print_status','main_status','status_trans','status_cnf'];
+        'ref_ship_name', 'ref_ship_id', 'candf', 'note', 'status','print_status','main_status',
+        'status_trans','status_cnf', 'status_transclose'];
 
     public function podatadetails()
     {
@@ -21,5 +22,9 @@ class PoData extends Model
         return $this->hasMany('App\FileUpload', 'po_data_id');
     }
 
+    public function banktransd()
+    {
+        return $this->hasMany('App\BankTransD', 'po_data_id');
+    }
 
 }

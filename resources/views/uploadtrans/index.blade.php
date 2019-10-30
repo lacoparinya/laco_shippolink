@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">Sapdatacfs</div>
+                    <div class="card-header"><h3>ใบโอนเงิน</h3></div>
                     <div class="card-body">
                         <a href="{{ url('/uploadtrans/create') }}" class="btn btn-success btn-sm" title="Add New SapDataCf">
                             <i class="fa fa-plus" aria-hidden="true"></i> Upload ใบโอน
@@ -28,7 +28,8 @@
                                     <tr>
                                         <th>#</th>
                                         <th>File</th>
-                                        <th>USD / BHT / Exchange Rate</th>
+                                        <th>วันที่โอน</th>
+                                        <th>USD</th>
                                         <th>Invoice</th>
                                         <th>Actions</th>
                                     </tr>
@@ -38,16 +39,17 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $item->filename }}</td>
-                                        <td>{{ $item->total_usd }} / {{ $item->total_bht }} / {{ $item->exchange_rate }}</td>
+                                        <td>{{ $item->trans_date }}</td>
+                                        <td>{{ $item->total_usd }}</td>
                                         <td>
                                             @foreach ($item->banktransd()->get() as $item2)
                                                 {{  $item2->podata->inv_name or  $item2->other_case}}<br/>
                                             @endforeach
                                         </td>
                                         <td>
+                                            <a href="{{ url('/uploadtrans/addnewinv/' . $item->id) }}" title="View SapDataCf"><button class="btn btn-success btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> Add Inv</button></a>
                                             <a href="{{ url('/uploadtrans/view/' . $item->id) }}" title="View SapDataCf"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
                                             <a href="{{ url('/uploadtrans/edit/' . $item->id) }}" title="Edit SapDataCf"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
-
                                             <form method="POST" action="{{ url('/sap-data-cfs' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
                                                 {{ method_field('DELETE') }}
                                                 {{ csrf_field() }}

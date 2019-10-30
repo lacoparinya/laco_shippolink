@@ -8,10 +8,13 @@
                 <div class="card-header"><h3>PO Datas | Status : {{ $status or 'ALL' }}</h3></div>
                     <div class="card-body">
                         <a href="{{ url('/imports/podata') }}" class="btn btn-success btn-sm" title="Add New ShipData">
-                            <i class="fa fa-upload" aria-hidden="true"></i> Import
+                            <i class="fa fa-upload" aria-hidden="true"></i> Import PO
                         </a>
                         <a href="{{ url('/file-uploads/create') }}" class="btn btn-success btn-sm" title="Add New ShipData">
                             <i class="fa fa-upload" aria-hidden="true"></i> Upload ใบขน
+                        </a>
+                        <a href="{{ url('/uploadtrans/create') }}" class="btn btn-success btn-sm" title="Add New ShipData">
+                            <i class="fa fa-upload" aria-hidden="true"></i> Upload ใบโอนเงิน
                         </a>
                         <a href="{{ url('/imports/AllProcess') }}" class="btn btn-success btn-sm" title="Add New PoData">
                             <i class="fa fa-microchip" aria-hidden="true"></i> Map ใบขน
@@ -48,7 +51,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>CSN / Order Name / Sale Order</th>
+                                        <th>CSN / Order Name / Sale Order / Invoice</th>
                                         <th>Loading Date<br/>Follow up date</th>
                                         <th>จำนวนสินค้า</th>
                                         <th>Tax Return</th>
@@ -61,7 +64,7 @@
                                 @foreach($podatas as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td><a href="{{ url('/po-datas/' . $item->id) }}" title="View PoData">{{ $item->CSN }} / {{ $item->order_name }} / {{ $item->sale_order_name }}</a></td>
+                                        <td><a href="{{ url('/po-datas/' . $item->id) }}" title="View PoData">{{ $item->CSN }} / {{ $item->order_name }} <br/>/ {{ $item->sale_order_name }} / {{ $item->inv_name }}</a></td>
                                         @if ( strtotime('+14 day', strtotime($item->loading_date)) <= strtotime(date('Y-m-d')))
                                           <td style="background-color:red;color:white;text-align:center;">{{ $item->loading_date }}<br/>{{ date('Y-m-d', strtotime('+14 day', strtotime($item->loading_date))) }}</td>
                                           
@@ -114,6 +117,28 @@
                                                @else
                                                <a href="{{ url('/po-datas/changestatus/' . $item->id) }}" title="Print เอกสารแล้ว"><button class="btn btn-success btn-sm"><i class="fa fa-print" aria-hidden="true"></i></button></a>
                                                @endif
+
+                                               @if ($item->banktransd->count() > 0)
+                                                   @php
+                                                       $totalusd = 0;
+                                                   @endphp
+                                                    @foreach ($item->banktransd()->get() as $item2)
+                                                    @php
+                                                        $totalusd += $item2->income_usd;
+                                                    @endphp
+                                                   @endforeach
+                                                   @foreach ($item->banktransd()->get() as $item2)
+                                                   @if (($item->candf - $totalusd) > 0 )
+                                                    <a href="{{ url('/uploadtrans/view/' . $item2->bank_trans_m_id) }}" title="โอนเงิน ยังไม่ครบ"><button class="btn btn-light btn-sm"><i class="fa fa-money" aria-hidden="true"></i></button></a>
+                                                 
+                                                   @else
+                                                       <a href="{{ url('/uploadtrans/view/' . $item2->bank_trans_m_id) }}" title="โอนเงิน ครบแล้ว"><button class="btn btn-success btn-sm"><i class="fa fa-money" aria-hidden="true"></i></button></a>
+                                                   @endif
+                                                   @endforeach
+                                               @else
+                                                   
+                                               @endif
+                                               
                                         </td>
                                         <td>
                                             @if ($flagcanclosed && $item->main_status != 'Complete')

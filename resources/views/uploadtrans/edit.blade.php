@@ -17,24 +17,28 @@
                             <button type="submit" class="btn btn-danger btn-sm" title="Delete SapDataCf" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
                         </form>
                         <br/><br/>
+                        <form method="POST" action="{{ url('/uploadtrans/editAction/'.$banktransm->id) }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+                            {{ csrf_field() }}
                         <div class="row">
                             <div class="col-md-3">
                                 <strong>File : </strong>{{ $banktransm->filename }}
                             </div>
                             <div class="col-md-3">
-                                <strong>ยอด USD : </strong>{{ $banktransm->total_usd }}
+                                <strong>วันที่โอน : </strong>
+                                <input class="form-control" type="date" name="trans_date"  id="trans_date" value="{{ $banktransm->trans_date }}">                                
                             </div>
                             <div class="col-md-3">
-                                <strong>ยอด BHT : </strong>{{ $banktransm->total_bht }}
+                                <strong>ยอด USD : </strong>
+                                <input class="form-control" name="total_usd"  id="total_usd" value="{{ $banktransm->total_usd }}">                                
                             </div>
                             <div class="col-md-3">
-                                <strong>Rate : </strong>{{ $banktransm->exchange_rate }}
+                                <strong>Note : </strong>
+                                <input class="form-control" name="note"  id="note" value="{{ $banktransm->note }}">                                
                             </div>
                         </div>
                         <br/>
                         <div class="table-responsive">
-                            <form method="POST" action="{{ url('/uploadtrans/editAction/'.$banktransm->id) }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
-                            {{ csrf_field() }}
+                            
                                 <input type="hidden"  name="totaltran"  id="totaltran" value="{{ $banktransm->total_usd }}">
                                           
                             <table class="table">
@@ -96,9 +100,9 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            </form>
+                            
                         </div>
-
+</form>
                     </div>
                 </div>
             </div>

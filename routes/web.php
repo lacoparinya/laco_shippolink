@@ -38,3 +38,8 @@ Route::get('/uploadtrans/index', 'UploadTransController@index');
 Route::get('/uploadtrans/view/{id}', 'UploadTransController@view');
 Route::get('/uploadtrans/edit/{id}', 'UploadTransController@edit');
 Route::post('/uploadtrans/editAction/{id}', 'UploadTransController@editAction');
+Route::get('/uploadtrans/addnewinv/{bank_trans_m_id}', 'UploadTransController@addnewinv');
+Route::post('/uploadtrans/addnewinvAction/{bank_trans_m_id}', 'UploadTransController@addnewinvAction');
+Route::get('/uploadtrans/removeinv/{bank_trans_d_id}', 'UploadTransController@removeinv');
+
+Route::get('/uploadtrans/testpdf', 'UploadTransController@testpdf');
