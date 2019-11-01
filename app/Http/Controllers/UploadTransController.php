@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use App\BankTransM;
 use App\BankTransD;
 use App\PoData;
+use Bnb\PdfToImage;
 
 class UploadTransController extends Controller
 {
@@ -112,36 +113,14 @@ class UploadTransController extends Controller
     }
 
     public function testpdf(){
-        $pdf = new \setasign\Fpdi\Fpdi();
+
+        $pathToPdf  = "C:\\Users\\parinya.k\\Desktop\\shippolink_test\\A0191620909501.pdf";
+        $pathToWhereImageShouldBeStored = "C:\\Users\\parinya.k\\Desktop\\shippolink_test\\";
+
+        $pdf = new PdfToImage\Pdf($pathToPdf);
+        $pdf->saveImage($pathToWhereImageShouldBeStored);
 
         
-        //$pdf->Output();
-
-        $pdf->AddPage();
-        $pdf->setSourceFile('C:\\Users\\parinya.k\\Desktop\\shippolink_test\\test1.pdf');
-
-        // We import only page 1
-        $tpl = $pdf->importPage(1);
-
-        // Let's use it as a template from top-left corner to full width and height
-        $pdf->useTemplate($tpl, 0, 0, null, null);
-
-        // Set font and color
-        $pdf->SetFont('Helvetica', 'B', 20); // Font Name, Font Style (eg. 'B' for Bold), Font Size
-        $pdf->SetTextColor(0, 0, 0); // RGB
-
-        // Position our "cursor" to left edge and in the middle in vertical position minus 1/2 of the font size
-        $pdf->SetXY(0, 139.7 - 10);
-
-        // Add text cell that has full page width and height of our font
-        $pdf->Cell(215.9, 20, 'This text goes to middle', 0, 2, 'C');
-
-        // Output our new pdf into a file
-        // F = Write local file
-        // I = Send to standard output (browser)
-        // D = Download file
-        // S = Return PDF as a string
-        $pdf->Output('/tmp/new-file.pdf', 'F');
     }
 
     private function _checkInvComplete($po_data_id){

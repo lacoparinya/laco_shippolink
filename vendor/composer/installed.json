@@ -63,6 +63,57 @@
         ]
     },
     {
+        "name": "bnbwebexpertise/pdf-to-image",
+        "version": "1.2.3",
+        "version_normalized": "1.2.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/bnbwebexpertise/pdf-to-image.git",
+            "reference": "28ccd1971d1f989cd84bac8b4d081e485c94f864"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/bnbwebexpertise/pdf-to-image/zipball/28ccd1971d1f989cd84bac8b4d081e485c94f864",
+            "reference": "28ccd1971d1f989cd84bac8b4d081e485c94f864",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.5.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "4.*",
+            "scrutinizer/ocular": "~1.1"
+        },
+        "time": "2017-02-02T12:00:36+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Bnb\\PdfToImage\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jeremy Gaulin",
+                "email": "jeremy@bnb.re",
+                "role": "Developer"
+            }
+        ],
+        "description": "Convert a pdf to an image with Imagick extension. Forked from spatie/pdf-to-image",
+        "homepage": "https://github.com/bnbwebexpertise/pdf-to-image",
+        "keywords": [
+            "bnbwebexpertise",
+            "convert",
+            "image",
+            "pdf",
+            "pdf-to-image"
+        ]
+    },
+    {
         "name": "composer/ca-bundle",
         "version": "1.2.4",
         "version_normalized": "1.2.4.0",

@@ -118,6 +118,10 @@ class ComposerStaticInit366760670b3f1e90cb2667908a2db3f8
             'Composer\\' => 9,
             'Collective\\Html\\' => 16,
         ),
+        'B' => 
+        array (
+            'Bnb\\PdfToImage\\' => 15,
+        ),
         'A' => 
         array (
             'Appzcoder\\CrudGenerator\\' => 24,
@@ -328,6 +332,10 @@ class ComposerStaticInit366760670b3f1e90cb2667908a2db3f8
         array (
             0 => __DIR__ . '/..' . '/laravelcollective/html/src',
         ),
+        'Bnb\\PdfToImage\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/bnbwebexpertise/pdf-to-image/src',
+        ),
         'Appzcoder\\CrudGenerator\\' => 
         array (
             0 => __DIR__ . '/..' . '/appzcoder/crud-generator/src',
@@ -434,6 +442,10 @@ class ComposerStaticInit366760670b3f1e90cb2667908a2db3f8
         'Appzcoder\\CrudGenerator\\CrudGeneratorServiceProvider' => __DIR__ . '/..' . '/appzcoder/crud-generator/src/CrudGeneratorServiceProvider.php',
         'ArithmeticError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
         'AssertionError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
+        'Bnb\\PdfToImage\\Exceptions\\InvalidFormat' => __DIR__ . '/..' . '/bnbwebexpertise/pdf-to-image/src/Exceptions/InvalidFormat.php',
+        'Bnb\\PdfToImage\\Exceptions\\PageDoesNotExist' => __DIR__ . '/..' . '/bnbwebexpertise/pdf-to-image/src/Exceptions/PageDoesNotExist.php',
+        'Bnb\\PdfToImage\\Exceptions\\PdfDoesNotExist' => __DIR__ . '/..' . '/bnbwebexpertise/pdf-to-image/src/Exceptions/PdfDoesNotExist.php',
+        'Bnb\\PdfToImage\\Pdf' => __DIR__ . '/..' . '/bnbwebexpertise/pdf-to-image/src/Pdf.php',
         'Carbon\\Carbon' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Carbon.php',
         'Carbon\\CarbonInterval' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonInterval.php',
         'Carbon\\CarbonPeriod' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonPeriod.php',

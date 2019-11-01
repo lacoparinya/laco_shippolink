@@ -78,7 +78,7 @@
                                               //  if($item->status == 'MAP Trans / C & F'){
                                                     $totaltax = 0;
                                                     foreach ($item->podatadetails as $itemdetail) {
-                                                        if(!empty($itemdetail->ship_data_id)){
+                                                        if(isset($itemdetail->shipdata->BHT) && !empty($itemdetail->ship_data_id)){
                                                             $totaltax += ($itemdetail->shipdata->BHT * $itemdetail->tax_rate)/100;
                                                         }
                                                     }
