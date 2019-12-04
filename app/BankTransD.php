@@ -14,4 +14,9 @@ class BankTransD extends Model
     {
         return $this->hasOne('App\PoData', 'id', 'po_data_id');
     }
+
+    public function banktransm()
+    {
+        return $this->hasOne('App\BankTransM', 'id', 'bank_trans_m_id');
+    }
 }

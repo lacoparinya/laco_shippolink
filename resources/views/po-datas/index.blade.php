@@ -134,6 +134,7 @@
                                                    @else
                                                        <a href="{{ url('/uploadtrans/view/' . $item2->bank_trans_m_id) }}" title="โอนเงิน ครบแล้ว"><button class="btn btn-success btn-sm"><i class="fa fa-money" aria-hidden="true"></i></button></a>
                                                    @endif
+                                                   <a href="{{ url('/'.$item2->banktransm->serverpath) }}" title="พิมพ์ใบโอนเงิน"><button class="btn btn-success btn-sm"><i class="fa fa-credit-card" aria-hidden="true"></i></button></a>
                                                    @endforeach
                                                @else
                                                    
