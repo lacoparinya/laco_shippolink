@@ -56,6 +56,7 @@ return array(
     'Composer\\CaBundle\\' => array($vendorDir . '/composer/ca-bundle/src'),
     'Composer\\' => array($vendorDir . '/composer/composer/src/Composer'),
     'Collective\\Html\\' => array($vendorDir . '/laravelcollective/html/src'),
+    'Codedge\\Fpdf\\' => array($vendorDir . '/codedge/laravel-fpdf/src'),
     'Bnb\\PdfToImage\\' => array($vendorDir . '/bnbwebexpertise/pdf-to-image/src'),
     'Appzcoder\\CrudGenerator\\' => array($vendorDir . '/appzcoder/crud-generator/src'),
     'App\\' => array($baseDir . '/app'),

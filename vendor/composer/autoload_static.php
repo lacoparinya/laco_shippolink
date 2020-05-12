@@ -117,6 +117,7 @@ class ComposerStaticInit366760670b3f1e90cb2667908a2db3f8
             'Composer\\CaBundle\\' => 18,
             'Composer\\' => 9,
             'Collective\\Html\\' => 16,
+            'Codedge\\Fpdf\\' => 13,
         ),
         'B' => 
         array (
@@ -332,6 +333,10 @@ class ComposerStaticInit366760670b3f1e90cb2667908a2db3f8
         array (
             0 => __DIR__ . '/..' . '/laravelcollective/html/src',
         ),
+        'Codedge\\Fpdf\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codedge/laravel-fpdf/src',
+        ),
         'Bnb\\PdfToImage\\' => 
         array (
             0 => __DIR__ . '/..' . '/bnbwebexpertise/pdf-to-image/src',
@@ -453,6 +458,9 @@ class ComposerStaticInit366760670b3f1e90cb2667908a2db3f8
         'Carbon\\Laravel\\ServiceProvider' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Laravel/ServiceProvider.php',
         'Carbon\\Translator' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Translator.php',
         'Carbon\\Upgrade' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Upgrade.php',
+        'Codedge\\Fpdf\\Facades\\Fpdf' => __DIR__ . '/..' . '/codedge/laravel-fpdf/src/Facades/Fpdf.php',
+        'Codedge\\Fpdf\\FpdfServiceProvider' => __DIR__ . '/..' . '/codedge/laravel-fpdf/src/FpdfServiceProvider.php',
+        'Codedge\\Fpdf\\Fpdf\\Fpdf' => __DIR__ . '/..' . '/codedge/laravel-fpdf/src/Fpdf/Fpdf.php',
         'Collective\\Html\\Componentable' => __DIR__ . '/..' . '/laravelcollective/html/src/Componentable.php',
         'Collective\\Html\\Eloquent\\FormAccessible' => __DIR__ . '/..' . '/laravelcollective/html/src/Eloquent/FormAccessible.php',
         'Collective\\Html\\FormBuilder' => __DIR__ . '/..' . '/laravelcollective/html/src/FormBuilder.php',

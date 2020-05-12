@@ -41,5 +41,7 @@ Route::post('/uploadtrans/editAction/{id}', 'UploadTransController@editAction');
 Route::get('/uploadtrans/addnewinv/{bank_trans_m_id}', 'UploadTransController@addnewinv');
 Route::post('/uploadtrans/addnewinvAction/{bank_trans_m_id}', 'UploadTransController@addnewinvAction');
 Route::get('/uploadtrans/removeinv/{bank_trans_d_id}', 'UploadTransController@removeinv');
+Route::delete('/uploadtrans/delete/{id}', 'UploadTransController@destroy');
 
 Route::get('/uploadtrans/testpdf', 'UploadTransController@testpdf');
+Route::get('/uploadtrans/genpdf/{id}', 'UploadTransController@processPdf');

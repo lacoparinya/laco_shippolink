@@ -37,8 +37,13 @@
                                 <tbody>
                                 @foreach($banktransms as $item)
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->filename }}</td>
+                                        <td>{{ $loop->iteration }}
+                                         </td>
+                                        <td>{{ $item->filename }}
+                                            @if (!empty($item->processpath))
+                                                <br/><a href="{{ url('/uploadtrans/genpdf/' . $item->id) }}" title="View SapDataCf" target="_blank"><button class="btn btn-success btn-sm">Process</button></a>    
+                                            @endif
+                                        </td>
                                         <td>{{ $item->trans_date }}</td>
                                         <td>{{ $item->total_usd }}</td>
                                         <td>
@@ -50,7 +55,7 @@
                                             <a href="{{ url('/uploadtrans/addnewinv/' . $item->id) }}" title="View SapDataCf"><button class="btn btn-success btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> Add Inv</button></a>
                                             <a href="{{ url('/uploadtrans/view/' . $item->id) }}" title="View SapDataCf"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
                                             <a href="{{ url('/uploadtrans/edit/' . $item->id) }}" title="Edit SapDataCf"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
-                                            <form method="POST" action="{{ url('/sap-data-cfs' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
+                                            <form method="POST" action="{{ url('/uploadtrans/delete' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
                                                 {{ method_field('DELETE') }}
                                                 {{ csrf_field() }}
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete SapDataCf" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>

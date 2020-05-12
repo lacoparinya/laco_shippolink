@@ -25,14 +25,19 @@ class UploadTransController extends Controller
         $trans = explode(".", $filenamereal);
         $tmp = array();
 
+
+
         $tmp['filename'] = $filenamereal;
         $tmp['serverpath'] = 'storage/banktransfer/' . date('Ymd') . '/' . $filenamereal;
+        $tmp['processpath'] = 'storage/banktransfer/' . date('Ymd') . '/process_' . $filenamereal;
         $tmp['type'] = 'PDF';
         $tmp['trans_date'] = $request->input('trans_date');
         $tmp['total_usd'] = $request->input('total_usd');
         //$tmp['total_bht'] = $request->input('total_bht');
         //$tmp['exchange_rate'] = $tmp['total_bht']/ $tmp['total_usd'];
         $tmp['note'] = $request->input('note');
+
+
 
         $btm = BankTransM::create($tmp);
 
@@ -51,6 +56,8 @@ class UploadTransController extends Controller
         $tmpd['bank_trans_m_id'] = $btm->id;
         $tmpd['other_case'] = 'ค่าจัดการBank';
         BankTransD::create($tmpd);
+
+        $this->reformatpdf($filenamereal);
 
         return redirect('uploadtrans/index')->with('flash_message', ' Uploaded!');
 
@@ -114,12 +121,38 @@ class UploadTransController extends Controller
 
     public function testpdf(){
 
-        $pathToPdf  = "C:\\Users\\parinya.k\\Desktop\\shippolink_test\\A0191620909501.pdf";
-        $pathToWhereImageShouldBeStored = "C:\\Users\\parinya.k\\Desktop\\shippolink_test\\";
+        $pathToPdf  = "C:\\Users\\parinya.k\\Desktop\\NIPPON2.pdf";
+        $pathToWhereImageShouldBeStored = "C:\\Users\\parinya.k\\Desktop\\";
 
-        $pdf = new PdfToImage\Pdf($pathToPdf);
-        $pdf->saveImage($pathToWhereImageShouldBeStored);
+        //$pdf = new \FDPI();
+        $pdf = new \setasign\Fpdi\Fpdi();
+       
 
+        $pdf->AddPage();
+        $pdf->setSourceFile($pathToPdf);
+
+        // We import only page 1
+        $tpl = $pdf->importPage(1);
+
+        // Let's use it as a template from top-left corner to full width and height
+        $pdf->useTemplate($tpl, 0, 0, null, null);
+
+        // Set font and color
+        $pdf->SetFont('Helvetica', 'B', 8); // Font Name, Font Style (eg. 'B' for Bold), Font Size
+        $pdf->SetTextColor(0, 0, 0); // RGB
+
+        // Position our "cursor" to left edge and in the middle in vertical position minus 1/2 of the font size
+        $pdf->SetXY(0, 139.7 - 10);
+
+        // Add text cell that has full page width and height of our font
+        $pdf->Cell(300, 10, 'INV. 1291013899  USD  31,686.10', 0, 2, 'C');
+        $pdf->Cell(300, 10, 'INV. 1291013881  USD  17,858.75', 0, 2, 'C');
+        $pdf->Cell(300, 10, 'INV. 1291013871  USD  19,709.38', 0, 2, 'C');
+        $pdf->Cell(300, 10, 'INV. 1291013915  USD  25,606.02', 0, 2, 'C');
+        $pdf->Cell(300, 10, 'INV. 1291013916  USD  27,141.50', 0, 2, 'C');
+        $pdf->Cell(300, 10, 'INV. 1291013917  USD  31,666.98', 0, 2, 'C');
+
+        $pdf->Output('new-file.pdf', 'D');
         
     }
 
@@ -179,5 +212,78 @@ class UploadTransController extends Controller
         $this->_checkInvComplete($podataid);
 
         return redirect('uploadtrans/view/'. $bank_trans_m_id)->with('flash_message', ' deleted!');
+    }
+
+    public function processPdf($id){
+        $banktransm = BankTransM::findOrFail($id);
+
+        $pathToPdf  = $banktransm->processpath;
+        $pathToWhereImageShouldBeStored = "C:\\Users\\parinya.k\\Desktop\\";
+        //echo $pathToPdf;
+        //$pdf = new \FDPI();
+        $pdf = new \setasign\Fpdi\Fpdi();
+
+
+        $pdf->AddPage();
+        $pdf->setSourceFile($pathToPdf);
+
+        // We import only page 1
+        $tpl = $pdf->importPage(1);
+
+        // Let's use it as a template from top-left corner to full width and height
+        $pdf->useTemplate($tpl, 0, 0, null, null);
+
+        // Set font and color
+        $pdf->SetFont('Helvetica', 'B', 8); // Font Name, Font Style (eg. 'B' for Bold), Font Size
+        $pdf->SetTextColor(0, 0, 0); // RGB
+
+        // Position our "cursor" to left edge and in the middle in vertical position minus 1/2 of the font size
+        $pdf->SetXY(0, 139.7 - 10);
+
+        // Add text cell that has full page width and height of our font
+        foreach ($banktransm->banktransd()->get() as $item2) {
+            if(!empty($item2->podata->inv_name)){
+                $pdf->Cell(320, 5, 'INV. ' . $item2->podata->inv_name .'  USD  '. $item2->income_usd, 0, 2, 'C');
+            }
+        }
+        $pdf->Output('invadd_'.$banktransm->filename, 'D');
+    }
+
+    private function reformatpdf($filename){
+
+        //The PDF version that you want to convert
+        //the file into.
+        $pdfVersion = "1.4";
+
+        //The path that you want to save the new
+        //file to
+        $newFiletmp = 'storage/banktransfer/' . date('Ymd') . '/'. 'process_' . $filename;
+
+
+        $newFile = Storage::disk('public')->path($newFiletmp);
+
+        //The path of the file that you want
+        //to convert
+        $currentFileTmp = 'storage/banktransfer/' . date('Ymd') . '/' . $filename;
+
+        $currentFile = Storage::disk('public')->path($currentFileTmp);
+
+        $gsPath = '"c:\\Program Files\\gs\\gs9.52\\bin\\gswin64c.exe" ';
+
+        //Create the GhostScript command
+        $gsCmd = $gsPath." -sDEVICE=pdfwrite -dCompatibilityLevel=$pdfVersion -dNOPAUSE -dBATCH -sOutputFile=$newFiletmp $currentFileTmp > D:\\output.txt";
+        echo $gsCmd ;
+        //Run it using PHP's exec function.
+        exec($gsCmd);
+
+        return 'process_'. $filename;
+
+    }
+
+    public function destroy($id)
+    {
+        BankTransM::destroy($id);
+
+        return redirect('uploadtrans/index')->with('flash_message', ' deleted!');
     }
 }

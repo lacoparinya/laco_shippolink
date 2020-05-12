@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class BankTransM extends Model
 {
     protected $fillable = [
-        'filename', 'serverpath', 'type', 'total_usd', 'total_bht', 'exchange_rate', 'note', 'trans_date'
+        'filename', 'serverpath', 'type', 'total_usd', 'total_bht', 'exchange_rate', 'note', 'trans_date', 'processpath'
     ];
 
     public function banktransd()

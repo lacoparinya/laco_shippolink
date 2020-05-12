@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 
@@ -137,20 +138,23 @@ class ImportsController extends Controller
 
                     $filename = "fileName_" . time() . '_' . $request->file('uploadfile')->getClientOriginalName();
 
-                   // echo $filename;
+                   
 
                     $uploadfilepath = $request->file('uploadfile')->storeAs('public/excel', $filename);
 
-                    // echo $uploadfilepath;
+                    
 
                     $realPathFile =  Storage::disk('public')->path('excel');
 
 
                     $realfile = $realPathFile . "\\" . $filename;
+
+                    echo $realfile;
                     Excel::load($realfile, function ($reader) {
 
                         $reader->each(function ($row) {
-
+                            var_dump($row);
+                            echo "Run<br/><br/>";
                             if(!empty($row->order)){
                             
                             //check create PO Master
@@ -159,7 +163,7 @@ class ImportsController extends Controller
                             if(!empty($chkmaster)){
 
                             }else{
-                                //var_dump($row);
+                                var_dump($row);
                                 $tmp = array();
 
                                 $tmp['upload_date'] = date('Y-m-d');
@@ -175,6 +179,8 @@ class ImportsController extends Controller
                                 $tmp['status'] = 'WAIT';
 
                                 $chkmaster = PoData::create($tmp);
+
+                                echo $chkmaster->id;
                             }
 
                             //insert Details
@@ -203,7 +209,7 @@ class ImportsController extends Controller
                         });
                     });
 
-                   return redirect('po-datas')->with('flash_message', ' Import success!!');
+                   //return redirect('po-datas')->with('flash_message', ' Import success!!');
                 }
 
         }
