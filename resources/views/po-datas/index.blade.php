@@ -128,13 +128,19 @@
                                                     @endphp
                                                    @endforeach
                                                    @foreach ($item->banktransd()->get() as $item2)
-                                                   @if (($item->candf - $totalusd) > 0 )
-                                                    <a href="{{ url('/uploadtrans/view/' . $item2->bank_trans_m_id) }}" title="โอนเงิน ยังไม่ครบ"><button class="btn btn-light btn-sm"><i class="fa fa-money" aria-hidden="true"></i></button></a>
-                                                 
-                                                   @else
-                                                       <a href="{{ url('/uploadtrans/view/' . $item2->bank_trans_m_id) }}" title="โอนเงิน ครบแล้ว"><button class="btn btn-success btn-sm"><i class="fa fa-money" aria-hidden="true"></i></button></a>
-                                                   @endif
-                                                   <a href="{{ url('/'.$item2->banktransm->serverpath) }}" title="พิมพ์ใบโอนเงิน"><button class="btn btn-success btn-sm"><i class="fa fa-credit-card" aria-hidden="true"></i></button></a>
+                                                        @if (($item->candf - $totalusd) > 0 )
+                                                            <a href="{{ url('/uploadtrans/view/' . $item2->bank_trans_m_id) }}" title="โอนเงิน ยังไม่ครบ"><button class="btn btn-light btn-sm"><i class="fa fa-money" aria-hidden="true"></i></button></a>
+                                                        @else
+                                                            <a href="{{ url('/uploadtrans/view/' . $item2->bank_trans_m_id) }}" title="โอนเงิน ครบแล้ว"><button class="btn btn-success btn-sm"><i class="fa fa-money" aria-hidden="true"></i></button></a>
+                                                        @endif
+                                                        @if (!empty($item2->banktransm->processpath))
+                                                            <a href="{{ url('/uploadtrans/genpdf/'.$item2->bank_trans_m_id) }}" title="พิมพ์ใบโอนเงิน"><button class="btn btn-success btn-sm"><i class="fa fa-credit-card" aria-hidden="true"></i></button></a>
+                                                        @else
+                                                            @if (!empty($item2->banktransm->serverpath))
+                                                                <a href="{{ url('/'.$item2->banktransm->serverpath) }}" title="พิมพ์ใบโอนเงิน"><button class="btn btn-success btn-sm"><i class="fa fa-credit-card" aria-hidden="true"></i></button></a>
+                                                            @endif
+                                                        @endif
+                                                   
                                                    @endforeach
                                                @else
                                                    
