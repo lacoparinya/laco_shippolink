@@ -42,6 +42,8 @@
                                         <td>{{ $item->filename }}
                                             @if (!empty($item->processpath))
                                                 <br/><a href="{{ url('/uploadtrans/genpdf/' . $item->id) }}" title="View SapDataCf" target="_blank"><button class="btn btn-success btn-sm">Process</button></a>    
+                                            @else
+                                                <br/><a href="{{ url('/uploadtrans/updateformat/' . $item->id) }}" title="View SapDataCf" target="_blank"><button class="btn btn-danger btn-sm">Update</button></a>   
                                             @endif
                                         </td>
                                         <td>{{ $item->trans_date }}</td>

@@ -280,10 +280,56 @@ class UploadTransController extends Controller
 
     }
 
+    private function reformatpdfwithpath($filename,$path)
+    {
+
+        //The PDF version that you want to convert
+        //the file into.
+        $pdfVersion = "1.4";
+
+        //The path that you want to save the new
+        //file to
+        $newFiletmp = 'storage/banktransfer/' . $path[2] . '/' . 'process_' . $filename;
+
+
+        $newFile = Storage::disk('public')->path($newFiletmp);
+
+        //The path of the file that you want
+        //to convert
+        $currentFileTmp = 'storage/banktransfer/' . date('Ymd') . '/' . $filename;
+
+        $currentFile = Storage::disk('public')->path($currentFileTmp);
+
+        $gsPath = '"c:\\Program Files\\gs\\gs9.52\\bin\\gswin64c.exe" ';
+
+        //Create the GhostScript command
+        $gsCmd = $gsPath . " -sDEVICE=pdfwrite -dCompatibilityLevel=$pdfVersion -dNOPAUSE -dBATCH -sOutputFile=$newFiletmp $currentFileTmp > D:\\output.txt";
+        echo $gsCmd;
+        //Run it using PHP's exec function.
+        exec($gsCmd);
+
+        return 'process_' . $filename;
+    }
+
     public function destroy($id)
     {
         BankTransM::destroy($id);
 
         return redirect('uploadtrans/index')->with('flash_message', ' deleted!');
+    }
+
+    public function updateformat($id){
+        $banktransm = BankTransM::findOrFail($id);
+
+        $filenamereal = str_replace(" ", "_", $banktransm->filename);
+        $serverpath = $banktransm->serverpath;
+        $serverArray = explode("/",$serverpath);
+        $banktransm->processpath = $serverArray[0].'/'. $serverArray[1] . '/' . $serverArray[2].'/process_' . $filenamereal;
+
+        $banktransm->update();
+
+        $this->reformatpdfwithpath($filenamereal, $serverArray);
+
+        return redirect('uploadtrans/index')->with('flash_message', ' EDit!');
     }
 }

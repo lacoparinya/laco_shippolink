@@ -45,3 +45,4 @@ Route::delete('/uploadtrans/delete/{id}', 'UploadTransController@destroy');
 
 Route::get('/uploadtrans/testpdf', 'UploadTransController@testpdf');
 Route::get('/uploadtrans/genpdf/{id}', 'UploadTransController@processPdf');
+Route::get('/uploadtrans/updateformat/{id}', 'UploadTransController@updateformat');
