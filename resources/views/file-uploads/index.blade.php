@@ -30,7 +30,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Filename</th>
-                                        <th>เลขใบขน</th>
+                                        <th>เลขใบขน/INV</th>
                                         <th>สถานะ</th>
                                         <th>Actions</th>
                                     </tr>
@@ -41,7 +41,7 @@
                                         <td>{{ $item->id }}</td>
                                         <td><a href="{{ url($item->serverpath) }}" target="_blank" title="View PoData">{{ $item->filename }}</a>
                                         </td>
-                                        <td>{{ $item->transno }}</td>
+                                        <td>{{ $item->transno or $item->invno }}</td>
                                         <td>{{ $item->status }}</td>
                                         <td>
                                             <form method="POST" action="{{ url('/file-uploads' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">

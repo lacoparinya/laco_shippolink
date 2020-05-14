@@ -28,15 +28,15 @@ class PoDatasController extends Controller
 
         if (empty($status)) {
             if (!empty($keyword)) {
-                $podatas = PoData::orderBy('loading_date')->paginate($perPage);
+                $podatas = PoData::where('inv_name','like','%'.$keyword.'%')->orderBy('loading_date', 'desc')->paginate($perPage);
             } else {
-                $podatas = PoData::orderBy('loading_date')->paginate($perPage);
+                $podatas = PoData::orderBy('loading_date', 'desc')->paginate($perPage);
             }
         }else{
             if (!empty($keyword)) {
-                $podatas = PoData::where('main_status', $status)->orderBy('loading_date')->paginate($perPage);
+                $podatas = PoData::where('inv_name', 'like', '%' . $keyword . '%')->where('main_status', $status)->orderBy('loading_date','desc')->paginate($perPage);
             } else {
-                $podatas = PoData::where('main_status', $status)->orderBy('loading_date')->paginate($perPage);
+                $podatas = PoData::where('main_status', $status)->orderBy('loading_date', 'desc')->paginate($perPage);
             }
         }
 

@@ -11,6 +11,7 @@ class FileUpload extends Model
             ,'serverpath'
             ,'type'
             ,'transno'
+            ,'invno'
             ,'po_data_id'
             ,'status'];
 }
