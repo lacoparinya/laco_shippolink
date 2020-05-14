@@ -5,10 +5,10 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                <div class="card-header"><h3>PO Datas | Status : {{ $status or 'ALL' }}</h3></div>
+                <div class="card-header"><h3>Blue Conner Datas | Status : {{ $status or 'ALL' }}</h3></div>
                     <div class="card-body">
                         <a href="{{ url('/imports/podata') }}" class="btn btn-success btn-sm" title="Add New ShipData">
-                            <i class="fa fa-upload" aria-hidden="true"></i> Import PO
+                            <i class="fa fa-upload" aria-hidden="true"></i> Upload Blue Conner Datas
                         </a>
                         <a href="{{ url('/file-uploads/create') }}" class="btn btn-success btn-sm" title="Add New ShipData">
                             <i class="fa fa-upload" aria-hidden="true"></i> Upload ใบขน
@@ -17,10 +17,10 @@
                             <i class="fa fa-upload" aria-hidden="true"></i> Upload ใบโอนเงิน
                         </a>
                         <a href="{{ url('/imports/AllProcess') }}" class="btn btn-success btn-sm" title="Add New PoData">
-                            <i class="fa fa-microchip" aria-hidden="true"></i> Map ใบขน
+                            <i class="fa fa-microchip" aria-hidden="true"></i> Match  ใบขน
                         </a>
                         <a href="{{ url('/imports/AllProcessCf') }}" class="btn btn-success btn-sm" title="Add New PoData">
-                            <i class="fa fa-microchip" aria-hidden="true"></i> Map C & F
+                            <i class="fa fa-microchip" aria-hidden="true"></i> Match  C & F
                         </a>
                         <form method="GET" action="{{ url('/po-datas') }}" accept-charset="UTF-8" class="form-inline my-2 my-lg-0 float-right" role="search">
                             <div class="input-group">
@@ -75,7 +75,7 @@
                                         <td style="text-align:center;">{{ $item->podatadetails->count() }}</td>
                                         <td>
                                             @php
-                                              //  if($item->status == 'MAP Trans / C & F'){
+                                              //  if($item->status == 'Match  Trans / C & F'){
                                                     $totaltax = 0;
                                                     foreach ($item->podatadetails as $itemdetail) {
                                                         if(isset($itemdetail->shipdata->BHT) && !empty($itemdetail->ship_data_id)){
@@ -89,14 +89,14 @@
                                         
                                         <td>
                                             @if ($item->status_trans == 'Yes')
-                                                <button class="btn btn-success btn-sm" title="Map ใบขนแล้ว" ><i class="fa fa-truck" aria-hidden="true"></i></button>
+                                                <button class="btn btn-success btn-sm" title="Match  ใบขนแล้ว" ><i class="fa fa-truck" aria-hidden="true"></i></button>
                                             @else
-                                                <button class="btn btn-light btn-sm" title="ยังไม่ได้ Map ใบขน"><i class="fa fa-truck" aria-hidden="true"></i></button>
+                                                <button class="btn btn-light btn-sm" title="ยังไม่ได้ Match  ใบขน"><i class="fa fa-truck" aria-hidden="true"></i></button>
                                             @endif
                                             @if ($item->status_cnf == 'Yes')
-                                                <button class="btn btn-success btn-sm" title="Map C & F แล้ว" ><i class="fa fa-usd" aria-hidden="true"></i></button>
+                                                <button class="btn btn-success btn-sm" title="Match  C & F แล้ว" ><i class="fa fa-usd" aria-hidden="true"></i></button>
                                             @else
-                                                <button class="btn btn-light btn-sm" title="ยังไม่ได้ Map C & F" ><i class="fa fa-usd" aria-hidden="true"></i></button>
+                                                <button class="btn btn-light btn-sm" title="ยังไม่ได้ Match  C & F" ><i class="fa fa-usd" aria-hidden="true"></i></button>
                                             @endif
                                                @php
                                                    $flagcanclosed = true;

@@ -27,9 +27,9 @@ class UploadTransController extends Controller
 
 
 
-        $tmp['filename'] = $filenamereal;
-        $tmp['serverpath'] = 'storage/banktransfer/' . date('Ymd') . '/' . $filenamereal;
-        $tmp['processpath'] = 'storage/banktransfer/' . date('Ymd') . '/process_' . $filenamereal;
+        $tmp['filename'] = str_replace(" ", "_", $filenamereal);
+        $tmp['serverpath'] = 'storage/banktransfer/' . date('Ymd') . '/' . str_replace(" ", "_", $filenamereal);
+        $tmp['processpath'] = 'storage/banktransfer/' . date('Ymd') . '/process_' . str_replace(" ", "_", $filenamereal);
         $tmp['type'] = 'PDF';
         $tmp['trans_date'] = $request->input('trans_date');
         $tmp['total_usd'] = $request->input('total_usd');

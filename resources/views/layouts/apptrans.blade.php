@@ -45,7 +45,7 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="{{ url('/uploadtrans/index') }}">ใบโอนเงิน</a></li>
-                        <li><a href="{{ url('/po-datas') }}">Po Data</a></li>
+                        <li><a href="{{ url('/po-datas') }}">Blue Conner Data</a></li>
                             <li><a href="{{ url('/ship-datas') }}">Ships Data</a></li>
                             <li><a href="{{ url('/sap-data-cfs') }}">SAP C&F</a></li>
                         @if (Auth::guest())
