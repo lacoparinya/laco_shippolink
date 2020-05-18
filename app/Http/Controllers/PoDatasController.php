@@ -12,7 +12,7 @@ use App\PoDataDetail;
 use Illuminate\Http\Request;
 use Illuminate\Routing\UrlGenerator;
 use Maatwebsite\Excel\Facades\Excel;
-
+use Illuminate\Support\Facades\DB;
 
 class PoDatasController extends Controller
 {
@@ -25,8 +25,13 @@ class PoDatasController extends Controller
     {
         $keyword = $request->get('search');
         $keyword2 = $request->get('search2');
+        $monthsearch = $request->get('monthsearch');
         $perPage = 25;
         $status = $request->get('status');
+
+        $monthdata = DB::table('po_datas')
+            ->select(DB::raw("distinct format([loading_date],'yyyy-MM') as monthlist"))
+            ->get();
 
         $podataObj = new PoData(); 
 
@@ -39,10 +44,14 @@ class PoDatasController extends Controller
         if (!empty($keyword2)) {
             $podataObj = $podataObj->where('sale_order_name', 'like', '%' . $keyword2 . '%');
         }
+        if (!empty($monthsearch)) {
+            $lastdate = date("Y-m-t", strtotime($monthsearch . '-01'));
+            $podataObj = $podataObj->whereBetween('loading_date', array($monthsearch.'-01', $lastdate));
+        }
 
         $podatas = $podataObj->orderBy('loading_date')->paginate($perPage);
 
-        return view('po-datas.index', compact('podatas','status'));
+        return view('po-datas.index', compact('podatas','status', 'monthdata'));
     }
 
     /**

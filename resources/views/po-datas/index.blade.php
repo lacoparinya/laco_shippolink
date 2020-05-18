@@ -56,6 +56,12 @@
                             <i class="fa fa-chain-broken" aria-hidden="true"></i> Reject
                         </a>
                         <br/>
+                        @foreach ($monthdata as $monthitem)
+                        [<a href="{{ url('/po-datas?monthsearch='.$monthitem->monthlist) }}" title="Status Reject">
+                             {{ $monthitem->monthlist }}
+                        </a>]    
+                        @endforeach
+                        <br/>
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
@@ -186,7 +192,7 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                             <div class="pagination-wrapper"> {!! $podatas->appends(['search' => Request::get('search'),'search2' => Request::get('search2'),'status' => Request::get('status')])->render() !!} </div>
+                             <div class="pagination-wrapper"> {!! $podatas->appends(['search' => Request::get('search'),'search2' => Request::get('search2'),'monthsearch' => Request::get('monthsearch'),'status' => Request::get('status')])->render() !!} </div>
                         </div>
                     </div>
                 </div>

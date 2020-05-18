@@ -63,6 +63,9 @@ class ImportBankTransfer extends Command
 
                     $baseInv = "1291";
                     $middleInv = "00";
+
+                    $baseSo = "1212";
+                    $middleSo = "00";
                     
                     $tmpmain = array();
                     $tmpInv = array();
@@ -88,7 +91,54 @@ class ImportBankTransfer extends Command
                             }
                             
                         }else{
+                            $invandso = str_replace(")", "", str_replace("(","", $invandso));
 
+                            $pos = strpos($invandso, "F");
+
+                            if($pos > 0){
+
+                                $substrinv = explode("F", $invandso);
+                                $rate = $substrinv[0];
+                                $invno = $baseInv . $middleInv . substr($substrinv[1], -4);
+
+                                $podata = PoData::where('inv_name', $invno)->first();
+
+                                echo $invno . "\n";
+                                $subtmpInv = array();
+                                var_dump($podata);
+                                if (!empty($podata)) {
+                                    $subtmpInv['po_data_id'] = $podata->id;
+                                    $subtmpInv['income_usd'] = $podata->candf * $rate / 100;
+                                    $tmpInv[] = $subtmpInv;
+                                }
+
+                            }else{
+                                $pos = strpos($invandso, "B");
+            
+                                if ($pos > 0) {
+
+                                    $substrinv = explode("B", $invandso);
+                                    $rate = $substrinv[0];
+                                    $saleno = $baseSo . $middleSo . substr($substrinv[1], -4);
+                                    
+                                    $podata = PoData::where('sale_order_name', $saleno)->first();
+
+                                    echo $invno . "\n";
+                                    $subtmpInv = array();
+                                    var_dump($podata);
+                                    if (!empty($podata)) {
+                                        $subtmpInv['po_data_id'] = $podata->id;
+                                        $subtmpInv['income_usd'] = $podata->candf*$rate/100;
+                                        $tmpInv[] = $subtmpInv;
+                                    }
+
+                                } else {
+                                    $invno = $baseInv . $middleInv . substr($invandso, -4);
+                                }
+                            }
+
+
+                            $invno = $baseInv . $middleInv . substr($invandso, -4);
                         }
 
 
