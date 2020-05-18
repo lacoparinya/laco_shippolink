@@ -11,6 +11,7 @@ use App\SapDataCf;
 use App\PoDataDetail;
 use Illuminate\Http\Request;
 use Illuminate\Routing\UrlGenerator;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class PoDatasController extends Controller
@@ -23,24 +24,23 @@ class PoDatasController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->get('search');
+        $keyword2 = $request->get('search2');
         $perPage = 25;
-        $status = $request->get('status');;
+        $status = $request->get('status');
 
-        if (empty($status)) {
-            if (!empty($keyword)) {
-                $podatas = PoData::where('inv_name','like','%'.$keyword.'%')->orderBy('loading_date', 'desc')->paginate($perPage);
-            } else {
-                $podatas = PoData::orderBy('loading_date', 'desc')->paginate($perPage);
-            }
-        }else{
-            if (!empty($keyword)) {
-                $podatas = PoData::where('inv_name', 'like', '%' . $keyword . '%')->where('main_status', $status)->orderBy('loading_date','desc')->paginate($perPage);
-            } else {
-                $podatas = PoData::where('main_status', $status)->orderBy('loading_date', 'desc')->paginate($perPage);
-            }
+        $podataObj = new PoData(); 
+
+        if (!empty($status)) {
+            $podataObj = $podataObj->where('main_status', $status);
+        }
+        if (!empty($keyword)) {
+            $podataObj = $podataObj->where('inv_name','like','%'.$keyword.'%');
+        }
+        if (!empty($keyword2)) {
+            $podataObj = $podataObj->where('sale_order_name', 'like', '%' . $keyword2 . '%');
         }
 
-        
+        $podatas = $podataObj->orderBy('loading_date')->paginate($perPage);
 
         return view('po-datas.index', compact('podatas','status'));
     }
@@ -254,5 +254,17 @@ class PoDatasController extends Controller
 
         // return redirect('freeze-ms?status='. $status, compact('freezem'));
         return redirect(url()->previous())->with('flash_message', ' updated!');
+    }
+
+    public function exportall(){
+        $podatas = PoData::orderBy('loading_date')->get();
+
+        $filename = "po_report_" . date('ymdHi');
+
+        Excel::create($filename, function ($excel) use ($podatas) {
+            $excel->sheet('podata', function ($sheet) use ($podatas) {
+                $sheet->loadView('exports.podata')->with('data', $podatas);
+            });
+        })->export('xlsx');
     }
 }

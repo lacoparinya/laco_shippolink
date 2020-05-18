@@ -23,7 +23,7 @@ class FileUploadsController extends Controller
         $perPage = 25;
 
         if (!empty($keyword)) {
-            $fileuploads = FileUpload::latest()->paginate($perPage);
+            $fileuploads = FileUpload::where('transno','like','%'.$keyword.'%')->latest()->paginate($perPage);
         } else {
             $fileuploads = FileUpload::latest()->paginate($perPage);
         }

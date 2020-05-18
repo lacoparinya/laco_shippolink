@@ -13,18 +13,28 @@
                         <a href="{{ url('/file-uploads/create') }}" class="btn btn-success btn-sm" title="Add New ShipData">
                             <i class="fa fa-upload" aria-hidden="true"></i> Upload ใบขน
                         </a>
+                        <a href="{{ url('/imports/shipdata') }}" class="btn btn-success btn-sm" title="Add New ShipData">
+                            <i class="fa fa-upload" aria-hidden="true"></i> Upload รายการพร้อมเลขใบขน 
+                        </a>
                         <a href="{{ url('/uploadtrans/create') }}" class="btn btn-success btn-sm" title="Add New ShipData">
                             <i class="fa fa-upload" aria-hidden="true"></i> Upload ใบโอนเงิน
                         </a>
+
+
                         <a href="{{ url('/imports/AllProcess') }}" class="btn btn-success btn-sm" title="Add New PoData">
                             <i class="fa fa-microchip" aria-hidden="true"></i> Match  ใบขน
                         </a>
                         <a href="{{ url('/imports/AllProcessCf') }}" class="btn btn-success btn-sm" title="Add New PoData">
                             <i class="fa fa-microchip" aria-hidden="true"></i> Match  C & F
                         </a>
+                        <a href="{{ url('/po-datas/export/all') }}" class="btn btn-success btn-sm" title="Export">
+                            <i class="fa fa-table" aria-hidden="true"></i> Export
+                        </a>
                         <form method="GET" action="{{ url('/po-datas') }}" accept-charset="UTF-8" class="form-inline my-2 my-lg-0 float-right" role="search">
                             <div class="input-group">
-                                <input type="text" class="form-control" name="search" placeholder="Search..." value="{{ request('search') }}">
+                                <input type="text" class="form-control" name="search" placeholder="INV No..." value="{{ request('search') }}">
+                                <input type="text" class="form-control" name="search2" placeholder="SO No..." value="{{ request('search2') }}">
+                                
                                 <span class="input-group-append">
                                     <button class="btn btn-secondary" type="submit">
                                         <i class="fa fa-search"></i>
@@ -176,10 +186,8 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                             <div class="pagination-wrapper"> {!! $podatas->appends(['search' => Request::get('search'),'status' => Request::get('status')])->render() !!} </div>
-                       
+                             <div class="pagination-wrapper"> {!! $podatas->appends(['search' => Request::get('search'),'search2' => Request::get('search2'),'status' => Request::get('status')])->render() !!} </div>
                         </div>
-
                     </div>
                 </div>
             </div>

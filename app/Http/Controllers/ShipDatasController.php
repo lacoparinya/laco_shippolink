@@ -21,7 +21,7 @@ class ShipDatasController extends Controller
         $perPage = 25;
 
         if (!empty($keyword)) {
-            $shipdatas = ShipData::latest()->paginate($perPage);
+            $shipdatas = ShipData::where('inv_no','like','%'.$keyword.'%')->latest()->paginate($perPage);
         } else {
             $shipdatas = ShipData::latest()->paginate($perPage);
         }

@@ -31,6 +31,7 @@ Route::get('/imports/AllProcess', 'PoDatasController@AllProcess');
 Route::get('/imports/AllProcessCf', 'PoDatasController@AllProcessCf');
 Route::get('/po-datas/changestatus/{id}', 'PoDatasController@changestatus');
 Route::get('/po-datas/changemainstatus/{id}/{status}', 'PoDatasController@changemainstatus');
+Route::get('/po-datas/export/all/', 'PoDatasController@exportall');
 
 Route::get('/uploadtrans/create', 'UploadTransController@create');
 Route::post('/uploadtrans/createAction', 'UploadTransController@createAction');
