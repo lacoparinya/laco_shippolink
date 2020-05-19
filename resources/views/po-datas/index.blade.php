@@ -79,8 +79,16 @@
                                 <tbody>
                                 @foreach($podatas as $item)
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td><a href="{{ url('/po-datas/' . $item->id) }}" title="View PoData">{{ $item->CSN }} / {{ $item->order_name }} <br/>/ {{ $item->sale_order_name }} / {{ $item->inv_name }}</a></td>
+                                        <td 
+                                            @if ( $item->main_status == 'reject')
+                                                style="background-color:red;color:white;"
+                                            @endif
+                                            >{{ $loop->iteration }}</td>
+                                        <td 
+                                            @if ( $item->main_status == 'reject')
+                                                style="background-color:red;color:white;"
+                                            @endif
+                                            ><a href="{{ url('/po-datas/' . $item->id) }}" title="View PoData">{{ $item->CSN }} / {{ $item->order_name }} <br/>/ {{ $item->sale_order_name }} / {{ $item->inv_name }}</a></td>
                                         @if ( strtotime('+14 day', strtotime($item->loading_date)) <= strtotime(date('Y-m-d')))
                                           <td style="background-color:red;color:white;text-align:center;">{{ $item->loading_date }}<br/>{{ date('Y-m-d', strtotime('+14 day', strtotime($item->loading_date))) }}</td>
                                           
@@ -88,8 +96,17 @@
                                           <td style="text-align:center;">{{ $item->loading_date }}<br/>{{ date('Y-m-d', strtotime('+14 day', strtotime($item->loading_date))) }}</td>
                                           
                                         @endif
-                                        <td style="text-align:center;">{{ $item->podatadetails->count() }}</td>
-                                        <td>
+                                        <td 
+                                            @if ( $item->main_status == 'reject')
+                                                style="text-align:center;background-color:red;color:white;"
+                                            @endif
+                                            >
+                                        {{ $item->podatadetails->count() }}</td>
+                                        <td 
+                                            @if ( $item->main_status == 'reject')
+                                                style="background-color:red;color:white;"
+                                            @endif
+                                            >
                                             @php
                                               //  if($item->status == 'Match  Trans / C & F'){
                                                     $totaltax = 0;
@@ -103,7 +120,11 @@
                                             @endphp
                                         </td>
                                         
-                                        <td>
+                                        <td 
+                                            @if ( $item->main_status == 'reject')
+                                                style="background-color:red;color:white;"
+                                            @endif
+                                            >
                                             @if ($item->status_trans == 'Yes')
                                                 <button class="btn btn-success btn-sm" title="Match  ใบขนแล้ว" ><i class="fa fa-truck" aria-hidden="true"></i></button>
                                             @else
@@ -163,7 +184,11 @@
                                                @endif
                                                
                                         </td>
-                                        <td>
+                                        <td 
+                                            @if ( $item->main_status == 'reject')
+                                                style="background-color:red;color:white;"
+                                            @endif
+                                            >
                                             @if ($flagcanclosed && $item->main_status != 'Complete')
                                                 <a href="{{ url('/po-datas/changemainstatus/' . $item->id .'/Complete') }}" title="View PoData"><button class="btn btn-primary btn-sm"><i class="fa fa-check-circle" aria-hidden="true"></i></button></a>
                                             @else
@@ -171,10 +196,13 @@
                                             @endif
                                             
                                         </td>
-                                        <td>
+                                       <td 
+                                            @if ( $item->main_status == 'reject')
+                                                style="background-color:red;color:white;"
+                                            @endif
+                                            >
                                             
-                                            <a href="{{ url('/po-datas/' . $item->id . '/edit') }}" title="Edit PoData"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
-
+                                            
                                             <form method="POST" action="{{ url('/po-datas' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
                                                 {{ method_field('DELETE') }}
                                                 {{ csrf_field() }}

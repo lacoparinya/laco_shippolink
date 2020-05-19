@@ -175,7 +175,9 @@ class PoDatasController extends Controller
             $transname = "";
             foreach ($podata->podatadetails as $podatadetail) {
                 $shipData = ShipData::where('qty', $podatadetail->qty)
-                    ->where('inv_no', trim($podata->inv_name))->first();
+                    ->where('inv_no', trim($podata->inv_name))
+                    ->where('status', '04')
+                    ->orderBy('trans_no', 'desc')->first();
 
                 if (!empty($shipData)) {
                     $transname = $shipData->trans_no;

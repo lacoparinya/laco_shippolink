@@ -150,4 +150,18 @@ class FileUploadsController extends Controller
 
         return redirect('file-uploads')->with('flash_message', ' deleted!');
     }
+
+    public function rematch($id){
+        $fileupload = FileUpload::findOrFail($id);
+        
+        $podata = PoData::where('trans_name', $fileupload->transno)->first();
+
+        if(!empty($podata)){
+            $fileupload->po_data_id = $podata->id;
+            $fileupload->status = 'MAPPED';
+            $fileupload->update();
+        }
+
+        return redirect('file-uploads')->with('flash_message', ' updated!');
+    }
 }

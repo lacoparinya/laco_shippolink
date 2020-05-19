@@ -39,11 +39,13 @@
                                 @foreach($fileuploads as $item)
                                     <tr>
                                         <td>{{ $item->id }}</td>
-                                        <td><a href="{{ url($item->serverpath) }}" target="_blank" title="View PoData">{{ $item->filename }}</a>
+                                        <td><a href="{{ url($item->serverpath) }}" target="_blank" title="Re-Match">{{ $item->filename }}</a>
                                         </td>
                                         <td>{{ $item->transno or $item->invno }}</td>
                                         <td>{{ $item->status }}</td>
                                         <td>
+                                            <a href="{{ url('/file-uploads/rematch/' . $item->id ) }}" title="Edit PoData"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+
                                             <form method="POST" action="{{ url('/file-uploads' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
                                                 {{ method_field('DELETE') }}
                                                 {{ csrf_field() }}
