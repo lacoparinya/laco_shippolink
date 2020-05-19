@@ -21,6 +21,7 @@ Route::resource('sap-data-cfs', 'SapDataCfsController');
 Route::resource('po-datas', 'PoDatasController');
 Route::resource('file-uploads', 'FileUploadsController');
 Route::get('/file-uploads/rematch/{id}', 'FileUploadsController@rematch');
+Route::get('/file-uploads/rematchs/all/', 'FileUploadsController@rematchall');
 
 //Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/imports/shipdata', 'ImportsController@shipdata');

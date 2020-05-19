@@ -9,6 +9,7 @@ use App\PoData;
 use App\ShipData;
 use App\SapDataCf;
 use App\PoDataDetail;
+use App\FileUpload;
 use Illuminate\Http\Request;
 use Illuminate\Routing\UrlGenerator;
 use Maatwebsite\Excel\Facades\Excel;
@@ -167,6 +168,23 @@ class PoDatasController extends Controller
 
     public function AllProcess()
     {
+
+        $fileuploads = FileUpload::where('status', 'UPLOADED')->get();
+
+        foreach ($fileuploads as $tmp) {
+            $podata = PoData::where('trans_name', $tmp->transno)->first();
+
+            if (!empty($podata)) {
+
+                //$fileupload = FileUpload::findOrFail($tmp->id);
+                // $fileupload->update($requestData);
+
+                $tmp->po_data_id = $podata->id;
+                $tmp->status = 'MAPPED';
+                $tmp->update();
+            }
+        }
+
         $podatas = PoData::whereIn('status',['WAIT', 'MAP C & F'])->get();
 
         foreach ($podatas as $podata) {

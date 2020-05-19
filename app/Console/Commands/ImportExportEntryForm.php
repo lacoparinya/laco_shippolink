@@ -58,11 +58,12 @@ class ImportExportEntryForm extends Command
                     $tmp['filename'] = $fileupload;
                     $tmp['serverpath'] = 'storage/pdf/' . date('Ymd') . '/' . $fileupload;
                     $tmp['type'] = 'PDF';
+                    $tmp['transno'] = $trans[1];
                     $tmp['invno'] = $trans[0];
 
                     $chekData = FileUpload::where('filename', $fileupload)->first();
 
-                    $podata = PoData::where('inv_name', $trans[0])->first();
+                    $podata = PoData::where('trans_name', $trans[1])->first();
 
                     if (empty($podata)) {
                         $tmp['status'] = 'UPLOADED';

@@ -164,4 +164,27 @@ class FileUploadsController extends Controller
 
         return redirect('file-uploads')->with('flash_message', ' updated!');
     }
+
+    public function rematchall()
+    {
+        $fileuploads = FileUpload::where('status','UPLOADED')->get();
+
+        foreach ($fileuploads as $tmp) {
+            $podata = PoData::where('trans_name', $tmp->transno)->first();
+
+            if (!empty($podata)) {
+
+                //$fileupload = FileUpload::findOrFail($tmp->id);
+               // $fileupload->update($requestData);
+
+                $tmp->po_data_id = $podata->id;
+                $tmp->status = 'MAPPED';
+                $tmp->update();
+            }
+        }
+
+        
+
+        return redirect('file-uploads')->with('flash_message', ' updated!');
+    }
 }

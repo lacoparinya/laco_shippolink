@@ -7,6 +7,10 @@
                 <div class="card">
                     <div class="card-header"><h3>File PDF ใบขน</h3></div>
                     <div class="card-body">
+
+                        <a href="{{ url('/file-uploads/rematchs/all' ) }}" title="Edit PoData"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Rematch </button></a>
+
+
                         <a href="{{ url('/file-uploads/create') }}" class="btn btn-success btn-sm" title="Add New FileUpload">
                             <i class="fa fa-plus" aria-hidden="true"></i> Add New
                         </a>

@@ -41,6 +41,8 @@ class ImportsController extends Controller
 
                     $reader->each(function ($row) {
 
+                        if (trim($row->status) == '04'){
+
                         $tmp = array();
                         $mydate = str_replace('/', '-', $row->inv_date);
                         
@@ -65,13 +67,12 @@ class ImportsController extends Controller
                             ->where('qty', $row->quantity)
                             ->where('shipping_ref', trim($row->{'shipping_ref.'}))->first();
                         
-
-
                         if(!empty($chk)){
                             $chk->update($tmp);
                         }else{
                             ShipData::create($tmp);
                         }
+                    }
                     });
 
                     
