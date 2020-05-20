@@ -59,7 +59,7 @@ class ImportBankTransfer extends Command
                 //echo $totalnoarr[0] . "." . $totalnoarr[1];
                 if((sizeof($totalnoarr) == 3) && (floatval($totalnoarr[0].".". $totalnoarr[1]))){
                     //split INV or SO
-                    $invandsoarr = explode(".", $filenamearr[1]);
+                    $invandsoarr = explode("-", $filenamearr[1]);
 
                     $baseInv = "1291";
                     $middleInv = "00";
@@ -93,19 +93,22 @@ class ImportBankTransfer extends Command
                         }else{
                             $invandso = str_replace(")", "", str_replace("(","", $invandso));
 
-                            $pos = strpos($invandso, "F");
+                            echo $invandso . "\n";
 
+                            $pos = strpos($invandso, "F");
+                            //INV Partial recv
                             if($pos > 0){
 
                                 $substrinv = explode("F", $invandso);
                                 $rate = $substrinv[0];
                                 $invno = $baseInv . $middleInv . substr($substrinv[1], -4);
 
+
                                 $podata = PoData::where('inv_name', $invno)->first();
 
                                 echo $invno . "\n";
                                 $subtmpInv = array();
-                                var_dump($podata);
+                                //var_dump($podata);
                                 if (!empty($podata)) {
                                     $subtmpInv['po_data_id'] = $podata->id;
                                     $subtmpInv['income_usd'] = $podata->candf * $rate / 100;

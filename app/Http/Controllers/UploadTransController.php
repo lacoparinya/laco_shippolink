@@ -243,7 +243,7 @@ class UploadTransController extends Controller
         // Add text cell that has full page width and height of our font
         foreach ($banktransm->banktransd()->get() as $item2) {
             if(!empty($item2->podata->inv_name)){
-                $pdf->Cell(320, 5, 'INV. ' . $item2->podata->inv_name .'  USD  '. $item2->income_usd, 0, 2, 'C');
+                $pdf->Cell(320, 5, 'INV. ' . $item2->podata->inv_name .'  USD  '. number_format($item2->income_usd, 2, ".", ","), 0, 2, 'C');
             }
         }
         $pdf->Output('invadd_'.$banktransm->filename, 'D');
