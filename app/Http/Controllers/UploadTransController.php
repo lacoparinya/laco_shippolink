@@ -67,11 +67,27 @@ class UploadTransController extends Controller
         $keyword = $request->get('search');
         $perPage = 25;
 
+        $banktranm = new BankTransM();
+        $banktrand = new BankTransD();
+        $podata = new PoData();
+
+        if (!empty($keyword)) {
+            $podatalist = $podata->where('inv_name','like','%'. $keyword.'%')->pluck('id');
+
+            $banktranmlist = $banktrand->whereIn('po_data_id', $podatalist)->pluck('bank_trans_m_id');
+
+            $banktranm = $banktranm->whereIn('id', $banktranmlist);
+
+        }
+
+        $banktransms = $banktranm->orderBy('trans_date', 'DESC')->paginate($perPage);
+
+/*
         if (!empty($keyword)) {
             $banktransms = BankTransM::orderBy('trans_date','DESC')->paginate($perPage);
         } else {
             $banktransms = BankTransM::orderBy('trans_date', 'DESC')->paginate($perPage);
-        }
+        }*/
 
         return view('uploadtrans.index', compact('banktransms'));
     }

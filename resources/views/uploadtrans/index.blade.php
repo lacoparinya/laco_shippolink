@@ -47,7 +47,7 @@
                                             @endif
                                         </td>
                                         <td>{{ $item->trans_date }}</td>
-                                        <td>{{ $item->total_usd }}</td>
+                                        <td>{{ number_format($item->total_usd,2,".",",") }}</td>
                                         <td>
                                             @foreach ($item->banktransd()->get() as $item2)
                                                 {{  $item2->podata->inv_name or  $item2->other_case}}<br/>
