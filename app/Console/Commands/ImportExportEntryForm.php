@@ -45,7 +45,8 @@ class ImportExportEntryForm extends Command
         foreach ($scanned_directory as $fileupload) {
             //check file name
             $trans = explode(".", $fileupload);
-            if(sizeof($trans) == 2){
+
+            if(sizeof($trans) == 3){
                 
                 if(!is_dir('storage/app/public/pdf/' . date('Ymd'))){
                     mkdir('storage/app/public/pdf/' . date('Ymd'), 0777, true);
