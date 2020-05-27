@@ -49,6 +49,7 @@
                         <li><a href="{{ url('/po-datas') }}">Blue Conner Data</a></li>
                         <li><a href="{{ url('/sap-data-cfs') }}">SAP C&F</a></li>
                         <li><a href="{{ url('/ship-datas') }}">Ships Data</a></li>
+                        <li><a href="{{ url('/file-uploads') }}">ใบขน</a></li>
                         <li><a href="{{ url('/uploadtrans/index') }}">ใบโอนเงิน</a></li>
                             
                         @if (Auth::guest())

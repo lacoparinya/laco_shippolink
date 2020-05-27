@@ -48,16 +48,16 @@ class ImportBankTransfer extends Command
         foreach ($scanned_directory as $fileupload) {
             //Check Format file.
             $filenamearr = explode("_", $fileupload);
-            
-            if(sizeof($filenamearr) == 3){
+
+            if (sizeof($filenamearr) == 3) {
                 //Summary format
 
-                
+
 
                 $totalnoarr = explode(".", $filenamearr[2]);
                 //var_dump(floatval($filenamearr[0] . "." . $filenamearr[1]));
                 //echo $totalnoarr[0] . "." . $totalnoarr[1];
-                if((sizeof($totalnoarr) == 3) && (floatval($totalnoarr[0].".". $totalnoarr[1]))){
+                if ((sizeof($totalnoarr) == 3) && (floatval($totalnoarr[0] . "." . $totalnoarr[1]))) {
                     //split INV or SO
                     $invandsoarr = explode("-", $filenamearr[1]);
 
@@ -66,38 +66,37 @@ class ImportBankTransfer extends Command
 
                     $baseSo = "1212";
                     $middleSo = "00";
-                    
+
                     $tmpmain = array();
                     $tmpInv = array();
 
-                    
+
                     foreach ($invandsoarr as $invandso) {
                         //check type INV or SO
                         $pos = strpos($invandso, "(");
-                        echo $invandso."\n";
+                        echo $invandso . "\n";
                         if ($pos === false) {
                             //check type INV 100%
-                            $invno = $baseInv.$middleInv.substr($invandso,-4);
-                            
-                            $podata = PoData::where('inv_name',$invno)->first();
+                            $invno = $baseInv . $middleInv . substr($invandso, -4);
+
+                            $podata = PoData::where('inv_name', $invno)->first();
 
                             echo $invno . "\n";
                             $subtmpInv = array();
                             var_dump($podata);
-                            if(!empty($podata)){
+                            if (!empty($podata)) {
                                 $subtmpInv['po_data_id'] = $podata->id;
                                 $subtmpInv['income_usd'] = $podata->candf;
                                 $tmpInv[] = $subtmpInv;
                             }
-                            
-                        }else{
-                            $invandso = str_replace(")", "", str_replace("(","", $invandso));
+                        } else {
+                            $invandso = str_replace(")", "", str_replace("(", "", $invandso));
 
                             echo $invandso . "\n";
 
                             $pos = strpos($invandso, "F");
                             //INV Partial recv
-                            if($pos > 0){
+                            if ($pos > 0) {
 
                                 $substrinv = explode("F", $invandso);
                                 $rate = $substrinv[0];
@@ -114,27 +113,25 @@ class ImportBankTransfer extends Command
                                     $subtmpInv['income_usd'] = $podata->candf * $rate / 100;
                                     $tmpInv[] = $subtmpInv;
                                 }
-
-                            }else{
+                            } else {
                                 $pos = strpos($invandso, "B");
-            
+
                                 if ($pos > 0) {
 
                                     $substrinv = explode("B", $invandso);
                                     $rate = $substrinv[0];
                                     $saleno = $baseSo . $middleSo . substr($substrinv[1], -4);
-                                    
+
                                     $podata = PoData::where('sale_order_name', $saleno)->first();
 
-                                    echo $invno . "\n";
+                                    echo $saleno . "\n";
                                     $subtmpInv = array();
                                     var_dump($podata);
                                     if (!empty($podata)) {
                                         $subtmpInv['po_data_id'] = $podata->id;
-                                        $subtmpInv['income_usd'] = $podata->candf*$rate/100;
+                                        $subtmpInv['income_usd'] = $podata->candf * $rate / 100;
                                         $tmpInv[] = $subtmpInv;
                                     }
-
                                 } else {
                                     $invno = $baseInv . $middleInv . substr($invandso, -4);
                                 }
@@ -143,8 +140,6 @@ class ImportBankTransfer extends Command
 
                             $invno = $baseInv . $middleInv . substr($invandso, -4);
                         }
-
-
                     }
                     $subtmpInvB = array();
                     $subtmpInvB['other_case'] = 'ค่าจัดการBank';
@@ -153,12 +148,19 @@ class ImportBankTransfer extends Command
                     if (!is_dir('storage/app/public/banktransfer/' . date('Ymd'))) {
                         mkdir('storage/app/public/banktransfer/' . date('Ymd'), 0777, true);
                     }
+                    echo "len:" . strlen($fileupload) . "\n";
 
-                    if (copy($directory . '/' . $fileupload, 'storage/app/public/banktransfer/' . date('Ymd') . '/' . $fileupload)) {
+                    if (strlen($fileupload) > 150) {
+                        $filenewname = md5($fileupload) . ".pdf";
+                    } else {
+                        $filenewname = $fileupload;
+                    }
 
-                        $tmpmain['filename'] = str_replace(" ", "_", $fileupload);
-                        $tmpmain['serverpath'] = 'storage/banktransfer/' . date('Ymd') . '/' . str_replace(" ", "_", $fileupload);
-                        $tmpmain['processpath'] = 'storage/banktransfer/' . date('Ymd') . '/process_' . str_replace(" ", "_", $fileupload);
+                    if (copy($directory . '/' . $fileupload, 'storage/app/public/banktransfer/' . date('Ymd') . '/' . $filenewname)) {
+
+                        $tmpmain['filename'] = str_replace(" ", "_", $filenewname);
+                        $tmpmain['serverpath'] = 'storage/banktransfer/' . date('Ymd') . '/' . str_replace(" ", "_", $filenewname);
+                        $tmpmain['processpath'] = 'storage/banktransfer/' . date('Ymd') . '/process_' . str_replace(" ", "_", $filenewname);
                         $tmpmain['type'] = 'PDF';
                         $tmpmain['trans_date'] = date('Y-m-d');
                         $tmpmain['total_usd'] = floatval($totalnoarr[0] . "." . $totalnoarr[1]);
@@ -169,20 +171,17 @@ class ImportBankTransfer extends Command
                             $invobj['bank_trans_m_id'] = $btm->id;
                             var_dump($invobj);
                             BankTransD::create($invobj);
-                            if(!empty($invobj['po_data_id'])){
+                            if (!empty($invobj['po_data_id'])) {
                                 $this->_checkInvComplete($invobj['po_data_id']);
                             }
-                            
                         }
 
-                        $this->_reformatpdf($fileupload);
+                        $this->_reformatpdf($filenewname);
 
                         if (copy($directory . '/' . $fileupload, $completedirectory . '/' . $fileupload)) {
                             unlink($directory . '/' . $fileupload);
                         }
-
                     }
-
                 }
             }
         }

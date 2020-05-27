@@ -254,7 +254,14 @@ class UploadTransController extends Controller
         $pdf->SetTextColor(0, 0, 0); // RGB
 
         // Position our "cursor" to left edge and in the middle in vertical position minus 1/2 of the font size
-        $pdf->SetXY(0, 139.7 - 10);
+        //$pdf->SetXY(0, 139.7 - 10);
+
+        if(sizeof($banktransm->banktransd()->get()) > 10){
+            $sizepos = (sizeof($banktransm->banktransd()->get()) - 10) * 5;
+            $pdf->SetXY(0, 139.7 - 10 - $sizepos);
+        }else{
+            $pdf->SetXY(0, 139.7 - 10);
+        }
 
         // Add text cell that has full page width and height of our font
         foreach ($banktransm->banktransd()->get() as $item2) {
