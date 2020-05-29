@@ -70,6 +70,7 @@ class ImportBankTransfer extends Command
                     $tmpmain = array();
                     $tmpInv = array();
 
+                    $totalsoandinv = 0;
 
                     foreach ($invandsoarr as $invandso) {
                         //check type INV or SO
@@ -87,6 +88,9 @@ class ImportBankTransfer extends Command
                             if (!empty($podata)) {
                                 $subtmpInv['po_data_id'] = $podata->id;
                                 $subtmpInv['income_usd'] = $podata->candf;
+
+                                $totalsoandinv += $podata->candf;
+
                                 $tmpInv[] = $subtmpInv;
                             }
                         } else {
@@ -111,6 +115,9 @@ class ImportBankTransfer extends Command
                                 if (!empty($podata)) {
                                     $subtmpInv['po_data_id'] = $podata->id;
                                     $subtmpInv['income_usd'] = $podata->candf * $rate / 100;
+
+                                    $totalsoandinv += ($podata->candf * $rate / 100);
+
                                     $tmpInv[] = $subtmpInv;
                                 }
                             } else {
@@ -130,6 +137,9 @@ class ImportBankTransfer extends Command
                                     if (!empty($podata)) {
                                         $subtmpInv['po_data_id'] = $podata->id;
                                         $subtmpInv['income_usd'] = $podata->candf * $rate / 100;
+
+                                        $totalsoandinv += ($podata->candf * $rate / 100);
+
                                         $tmpInv[] = $subtmpInv;
                                     }
                                 } else {
@@ -158,28 +168,33 @@ class ImportBankTransfer extends Command
 
                     if (copy($directory . '/' . $fileupload, 'storage/app/public/banktransfer/' . date('Ymd') . '/' . $filenewname)) {
 
-                        $tmpmain['filename'] = str_replace(" ", "_", $filenewname);
-                        $tmpmain['serverpath'] = 'storage/banktransfer/' . date('Ymd') . '/' . str_replace(" ", "_", $filenewname);
-                        $tmpmain['processpath'] = 'storage/banktransfer/' . date('Ymd') . '/process_' . str_replace(" ", "_", $filenewname);
-                        $tmpmain['type'] = 'PDF';
-                        $tmpmain['trans_date'] = date('Y-m-d');
-                        $tmpmain['total_usd'] = floatval($totalnoarr[0] . "." . $totalnoarr[1]);
+                        $diff = floatval($totalnoarr[0] . "." . $totalnoarr[1]) - $totalsoandinv;
+                        echo "Sum inv or so " . $totalsoandinv . " from BAnk " . $totalnoarr[0] . "." . $totalnoarr[1] . " Diff " . $diff . "\n";
+                        if($diff <= 50){
 
-                        $btm = BankTransM::create($tmpmain);
+                            $tmpmain['filename'] = str_replace(" ", "_", $filenewname);
+                            $tmpmain['serverpath'] = 'storage/banktransfer/' . date('Ymd') . '/' . str_replace(" ", "_", $filenewname);
+                            $tmpmain['processpath'] = 'storage/banktransfer/' . date('Ymd') . '/process_' . str_replace(" ", "_", $filenewname);
+                            $tmpmain['type'] = 'PDF';
+                            $tmpmain['trans_date'] = date('Y-m-d');
+                            $tmpmain['total_usd'] = floatval($totalnoarr[0] . "." . $totalnoarr[1]);
 
-                        foreach ($tmpInv as $invobj) {
-                            $invobj['bank_trans_m_id'] = $btm->id;
-                            var_dump($invobj);
-                            BankTransD::create($invobj);
-                            if (!empty($invobj['po_data_id'])) {
-                                $this->_checkInvComplete($invobj['po_data_id']);
+                            $btm = BankTransM::create($tmpmain);
+
+                            foreach ($tmpInv as $invobj) {
+                                $invobj['bank_trans_m_id'] = $btm->id;
+                                var_dump($invobj);
+                                BankTransD::create($invobj);
+                                if (!empty($invobj['po_data_id'])) {
+                                    $this->_checkInvComplete($invobj['po_data_id']);
+                                }
                             }
-                        }
 
-                        $this->_reformatpdf($filenewname);
+                            $this->_reformatpdf($filenewname);
 
-                        if (copy($directory . '/' . $fileupload, $completedirectory . '/' . $fileupload)) {
-                            unlink($directory . '/' . $fileupload);
+                            if (copy($directory . '/' . $fileupload, $completedirectory . '/' . $fileupload)) {
+                                unlink($directory . '/' . $fileupload);
+                            }
                         }
                     }
                 }

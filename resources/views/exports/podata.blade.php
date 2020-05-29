@@ -53,6 +53,7 @@
                 <th>สถานะ Print</th>
                 <th>รายละเอียด</th>
                 <th>STATUS รวม</th>
+                <th>ภาษีรวม</th>
                 <th>Note</th>
             </tr>
         </thead>
@@ -73,6 +74,26 @@
                         <td>{{ $item->print_status }}</td>
                         <td>{{ $item->status }}</td>
                         <td>{{ $item->main_status }}</td>
+                        <td>
+                            @php
+                                //  if($item->status == 'Match  Trans / C & F'){
+                                    $totaltax = 0;
+
+                                    //if($item->status != 'reject'){
+                                        foreach ($item->podatadetails as $itemdetail) {
+                                            if(isset($itemdetail->shipdata->BHT) && !empty($itemdetail->ship_data_id)){
+                                                $totaltax += ($itemdetail->shipdata->BHT * $itemdetail->tax_rate)/100;
+                                            }
+                                        }
+                                    //}
+                                    echo number_format($totaltax,2,".",",");
+
+
+                                //   }
+                            @endphp
+
+                        </td>
+
                         <td>{{ $item->note }}</td>
                     </tr>
             @endforeach
