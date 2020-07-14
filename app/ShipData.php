@@ -19,4 +19,10 @@ class ShipData extends Model
       ,'FOB'
       ,'BHT'
       ,'status'];
+
+  public function podatadetail()
+  {
+    return $this->hasOne('App\PoDataDetail', 'ship_data_id', 'id');
+  }
+
 }

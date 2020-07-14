@@ -311,6 +311,10 @@ class PoDatasController extends Controller
         $podatadetail->unit_name = $requestData['unit_name'];
         $podatadetail->update();
 
+        $podata = PoData::findOrFail($podatadetail->po_data_id);
+        $podata->status = 'WAIT';
+        $podata->update();
+
         return redirect('po-datas/'. $podatadetail->po_data_id)->with('flash_message', ' update Detail');
     }
 }

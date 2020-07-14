@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">Shipdatas</div>
+                    <div class="card-header">Ships Data</div>
                     <div class="card-body">
                         <a href="{{ url('/ship-datas/create') }}" class="btn btn-success btn-sm" title="Add New ShipData">
                             <i class="fa fa-plus" aria-hidden="true"></i> Add New
@@ -38,6 +38,7 @@
                                         <th>Product Name</th>
                                         <th>QTY</th>
                                         <th>FOB/BHT</th>
+                                        <th>Map status</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -52,6 +53,7 @@
                                         <td>{{ $item->product_name }}</td>
                                         <td>{{ $item->qty }}</td>
                                         <td>{{ round($item->FOB,2) }} / {{ round($item->BHT,2) }}</td>
+                                        <td>{{ $item->podatadetail->product_name or '' }}</td>
                                         <td>
                                             <a href="{{ url('/ship-datas/' . $item->id) }}" title="View ShipData"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
                                             <a href="{{ url('/ship-datas/' . $item->id . '/edit') }}" title="Edit ShipData"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
