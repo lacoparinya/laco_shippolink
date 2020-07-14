@@ -79,7 +79,13 @@
                                         }
                                     @endphp
                                     <tr>
-                                        <td>{{$item->product_name}}</td>
+                                        <td>
+                                            @if (isset($item->shipdata->BHT))
+                                                {{$item->product_name}}
+                                            @else
+                                                <a href="{{ url('/po-datas/editdetails/'.$item->id) }}" title="Back">{{$item->product_name}}</a>
+                                            @endif
+                                            </td>
                                         <td>{{$item->product_code}}</td>
                                         <td>{{number_format($item->weight,2,".",",")}}</td>
                                         <td>{{number_format($item->qty,0,".",",")}}</td>

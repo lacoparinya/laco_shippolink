@@ -35,6 +35,7 @@ Route::get('/po-datas/changestatus/{id}', 'PoDatasController@changestatus');
 Route::get('/po-datas/changemainstatus/{id}/{status}', 'PoDatasController@changemainstatus');
 Route::get('/po-datas/export/all/', 'PoDatasController@exportall');
 
+
 Route::get('/uploadtrans/create', 'UploadTransController@create');
 Route::post('/uploadtrans/createAction', 'UploadTransController@createAction');
 Route::get('/uploadtrans/index', 'UploadTransController@index');
@@ -49,3 +50,6 @@ Route::delete('/uploadtrans/delete/{id}', 'UploadTransController@destroy');
 Route::get('/uploadtrans/testpdf', 'UploadTransController@testpdf');
 Route::get('/uploadtrans/genpdf/{id}', 'UploadTransController@processPdf');
 Route::get('/uploadtrans/updateformat/{id}', 'UploadTransController@updateformat');
+
+Route::get('/po-datas/editdetails/{id}', 'PoDatasController@editdetails');
+Route::post('/po-datas/editDetailAction/{id}', 'PoDatasController@editDetailAction');

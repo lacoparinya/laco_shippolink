@@ -69,7 +69,7 @@
                                         <th>#</th>
                                         <th>CSN / Order Name / Sale Order / Invoice</th>
                                         <th>Loading Date<br/>Follow up date</th>
-                                        <th>จำนวนสินค้า</th>
+                                        <th>Match no.<br>/จำนวนสินค้า</th>
                                         <th>Tax Return</th>
                                         <th>Link</th>
                                         <th>Status</th>
@@ -96,12 +96,21 @@
                                           <td style="text-align:center;">{{ $item->loading_date }}<br/>{{ date('Y-m-d', strtotime('+14 day', strtotime($item->loading_date))) }}</td>
                                           
                                         @endif
-                                        <td 
+                                        <td style="text-align:center;
                                             @if ( $item->main_status == 'reject')
-                                                style="text-align:center;background-color:red;color:white;"
+                                                background-color:red;color:white;
                                             @endif
+                                            "
                                             >
-                                        {{ $item->podatadetails->count() }}</td>
+                                        @php
+                                            $chknotmatch = 0;
+                                            foreach($item->podatadetails as $subitem){
+                                                if(isset($subitem->shipdata->BHT)){
+                                                    $chknotmatch++;
+                                                }
+                                            }
+                                        @endphp
+                                          {{ $chknotmatch }}  /{{ $item->podatadetails->count() }}</td>
                                         <td 
                                             @if ( $item->main_status == 'reject')
                                                 style="background-color:red;color:white;"

@@ -296,4 +296,21 @@ class PoDatasController extends Controller
             });
         })->export('xlsx');
     }
+
+    public function editdetails($id){
+        $podatadetail = PoDataDetail::findOrFail($id);
+
+        return view('po-datas.editdetail', compact('podatadetail'));
+    }
+
+    public function editDetailAction(Request $request, $id){
+        $requestData = $request->all();
+
+        $podatadetail = PoDataDetail::findOrFail($id);
+        $podatadetail->qty = $requestData['qty'];
+        $podatadetail->unit_name = $requestData['unit_name'];
+        $podatadetail->update();
+
+        return redirect('po-datas/'. $podatadetail->po_data_id)->with('flash_message', ' update Detail');
+    }
 }
