@@ -317,4 +317,32 @@ class PoDatasController extends Controller
 
         return redirect('po-datas/'. $podatadetail->po_data_id)->with('flash_message', ' update Detail');
     }
+
+    public function filter_export()
+    {
+        // $podata = PoData::findOrFail($id);
+
+        return view('po-datas.to_export');
+    }
+
+    public function export_range(Request $request){
+        // dd($request->start_date);
+        $st_date = $request->start_date;
+        $ed_date = $request->end_date;
+        if(date("Y-m-d", strtotime($st_date))<date("Y-m-d", strtotime('2019-07-30'))){
+            return redirect()->back()->withErrors('วันที่เริ่มต้นไม่สามารถน้อยกว่า 07/30/2019 ได้')->withInput();
+        }elseif(date("Y-m-d", strtotime($ed_date))<date("Y-m-d", strtotime($st_date))){
+            return redirect()->back()->withErrors('วันที่สิ้นสุด น้อยกว่า วันที่เริ่มต้น')->withInput();
+        }
+        
+        $podatas = PoData::whereRaw("loading_date between '".$request->start_date."' and '".$request->end_date."'")->orderBy('loading_date')->get();
+        // dd($podatas);
+        $filename = "po_report_" . date('ymdHi');
+
+        Excel::create($filename, function ($excel) use ($podatas) {
+            $excel->sheet('podata', function ($sheet) use ($podatas) {
+                $sheet->loadView('exports.podata')->with('data', $podatas);
+            });
+        })->export('xlsx');
+    }
 }

@@ -27,7 +27,7 @@
                         <a href="{{ url('/imports/AllProcessCf') }}" class="btn btn-success btn-sm" title="Add New PoData">
                             <i class="fa fa-microchip" aria-hidden="true"></i> Match  C & F
                         </a>
-                        <a href="{{ url('/po-datas/export/all') }}" class="btn btn-success btn-sm" title="Export">
+                        <a href="{{ url('po-datas/export/filter') }}" class="btn btn-success btn-sm" title="Export">
                             <i class="fa fa-table" aria-hidden="true"></i> Export
                         </a>
                         <form method="GET" action="{{ url('/po-datas') }}" accept-charset="UTF-8" class="form-inline my-2 my-lg-0 float-right" role="search">
